@@ -48,7 +48,7 @@ func NewStatsdRuntimeCollector(client StatsdClientWrapper) StatsdRuntimeCollecto
 	if funcNewStatsdRuntimeCollector != nil {
 		return funcNewStatsdRuntimeCollector(client)
 	}
-	funcSym, errSym := plug.Lookup("______")
+	funcSym, errSym := plug.Lookup("NewStatsdRuntimeCollector")
 	if errSym != nil {
 		log.Fatalf("Error in lookup symbol: %s", errSym)
 	}

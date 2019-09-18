@@ -232,19 +232,3 @@ func NewMQTTRPCServer(appName string, mqttClient MQTTClient) MQTTRPCServer {
 	}
 	return funcNewMQTTRPCServer(appName, mqttClient)
 }
-
-// if func______ != nil {
-// 	func______(____)
-// 	return
-// }
-// funcSym, errSym := plug.Lookup("______")
-// if errSym != nil {
-// 	log.Fatalf("Error in lookup symbol: %s", errSym)
-// }
-// var okResolve bool
-// func______, okResolve = funcSym.(______)
-// if !okResolve {
-// 	log.Fatal("Wrong sign on resolving func")
-// }
-// func______(____)
-// return
