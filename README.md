@@ -1,0 +1,1 @@
+wbgo interface to wbgo.so plugin
