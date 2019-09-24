@@ -97,6 +97,9 @@ const (
 	CONV_ALARM_DEFAULT_VALUE  = CONV_ALARM_VALUE_FALSE
 
 	CONV_SUBTOPIC_ALL = "+"
+
+	// Default values for control fields
+	CONV_CONTROL_WRITABLE_DEFAULT = false
 )
 
 // ControlDataType is a real data types used in representations

@@ -5,93 +5,15 @@ import (
 )
 
 var (
-	funcUseSyslog           func()
-	funcSetDebuggingEnabled func(bool)
-	funcDebuggingEnabled    func() bool
-	funcSetDebugLogger      func(logger *log.Logger, keep bool)
-	funcEnableMQTTDebugLog  func(bool)
-	funcMaybeInitProfiling  func(<-chan struct{})
-	funcNewDriverBase       func(args DriverArgs) (DeviceDriver, error)
-	funcNewLocalDeviceArgs  func() LocalDeviceArgs
-	funcNewControlArgs      func() ControlArgs
-	funcNewContentTracker   func() ContentTracker
-	funcNewDirWatcher       func(string, DirWatcherClient) DirWatcher
-	funcNewMQTTRPCServer    func(string, MQTTClient) MQTTRPCServer
+	funcEnableMQTTDebugLog func(bool)
+	funcMaybeInitProfiling func(<-chan struct{})
+	funcNewDriverBase      func(args DriverArgs) (DeviceDriver, error)
+	funcNewLocalDeviceArgs func() LocalDeviceArgs
+	funcNewControlArgs     func() ControlArgs
+	funcNewContentTracker  func() ContentTracker
+	funcNewDirWatcher      func(string, DirWatcherClient) DirWatcher
+	funcNewMQTTRPCServer   func(string, MQTTClient) MQTTRPCServer
 )
-
-// UseSyslog sets logs output to syslog
-func UseSyslog() {
-	if funcUseSyslog != nil {
-		funcUseSyslog()
-		return
-	}
-	funcSym, errSym := plug.Lookup("UseSyslog")
-	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
-	}
-	var okResolve bool
-	funcUseSyslog, okResolve = funcSym.(func())
-	if !okResolve {
-		log.Fatal("Wrong sign on resolving func")
-	}
-	funcUseSyslog()
-	return
-}
-
-// SetDebuggingEnabled on/off debugging
-func SetDebuggingEnabled(enable bool) {
-	if funcSetDebuggingEnabled != nil {
-		funcSetDebuggingEnabled(enable)
-		return
-	}
-	funcSym, errSym := plug.Lookup("SetDebuggingEnabled")
-	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
-	}
-	var okResolve bool
-	funcSetDebuggingEnabled, okResolve = funcSym.(func(bool))
-	if !okResolve {
-		log.Fatal("Wrong sign on resolving func")
-	}
-	funcSetDebuggingEnabled(enable)
-	return
-}
-
-// DebuggingEnabled returns true if debugging is enabled
-func DebuggingEnabled() bool {
-	if funcDebuggingEnabled != nil {
-		return funcDebuggingEnabled()
-	}
-	funcSym, errSym := plug.Lookup("DebuggingEnabled")
-	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
-	}
-	var okResolve bool
-	funcDebuggingEnabled, okResolve = funcSym.(func() bool)
-	if !okResolve {
-		log.Fatal("Wrong sign on resolving func")
-	}
-	return funcDebuggingEnabled()
-}
-
-// SetDebugLogger sets prepared debug logger
-func SetDebugLogger(logger *log.Logger, keep bool) {
-	if funcSetDebugLogger != nil {
-		funcSetDebugLogger(logger, keep)
-		return
-	}
-	funcSym, errSym := plug.Lookup("SetDebugLogger")
-	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
-	}
-	var okResolve bool
-	funcSetDebugLogger, okResolve = funcSym.(func(logger *log.Logger, keep bool))
-	if !okResolve {
-		log.Fatal("Wrong sign on resolving func")
-	}
-	funcSetDebugLogger(logger, keep)
-	return
-}
 
 // EnableMQTTDebugLog enables mqtt debug logging
 func EnableMQTTDebugLog(useSyslog bool) {
