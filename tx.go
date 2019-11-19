@@ -1,4 +1,4 @@
-package wbgo
+package wbgong
 
 // DriverTx is a transaction interface
 type DriverTx interface {

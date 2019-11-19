@@ -1,7 +1,7 @@
 package testutils
 
 import (
-	"github.com/contactless/wbgo"
+	"github.com/contactless/wbgong"
 	"github.com/stretchr/testify/require"
 	"log"
 	"sync"
@@ -27,7 +27,7 @@ func (fixture *FakeTimerFixture) ClearTimers() {
 	fixture.timers = make(map[uint64]*fakeTimer)
 }
 
-func (fixture *FakeTimerFixture) NewFakeTimerOrTicker(id uint64, d time.Duration, periodic bool) wbgo.Timer {
+func (fixture *FakeTimerFixture) NewFakeTimerOrTicker(id uint64, d time.Duration, periodic bool) wbgong.Timer {
 	if id == 0 {
 		id = fixture.nextTimerId
 		fixture.nextTimerId++
@@ -54,11 +54,11 @@ func (fixture *FakeTimerFixture) NewFakeTimerOrTicker(id uint64, d time.Duration
 	return timer
 }
 
-func (fixture *FakeTimerFixture) NewFakeTimer(d time.Duration) wbgo.Timer {
+func (fixture *FakeTimerFixture) NewFakeTimer(d time.Duration) wbgong.Timer {
 	return fixture.NewFakeTimerOrTicker(0, d, false)
 }
 
-func (fixture *FakeTimerFixture) NewFakeTicker(d time.Duration) wbgo.Timer {
+func (fixture *FakeTimerFixture) NewFakeTicker(d time.Duration) wbgong.Timer {
 	return fixture.NewFakeTimerOrTicker(0, d, true)
 }
 

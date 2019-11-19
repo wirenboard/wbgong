@@ -1,4 +1,4 @@
-package wbgo
+package wbgong
 
 // ControlError is MQTT control error interface
 type ControlError interface {

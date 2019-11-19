@@ -1,4 +1,4 @@
-package wbgo
+package wbgong
 
 // MQTTRPCServer represents mqtt rpc server
 type MQTTRPCServer interface {

@@ -1,1 +1,1 @@
-wbgo interface to wbgo.so plugin
+wbgong interface to wbgo.so plugin

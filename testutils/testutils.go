@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/contactless/wbgo"
+	"github.com/contactless/wbgong"
 	"github.com/stretchr/objx"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -83,7 +83,7 @@ func RegexpCaptureMatcherWithCustomText(itemRx string, text string, handler Rege
 		func(item string) bool {
 			m := rx.FindStringSubmatch(item)
 			if m == nil {
-				wbgo.Error.Printf(
+				wbgong.Error.Printf(
 					"RegexpCaptureMatcher: regexp mismatch: %s against %s",
 					item, rx)
 				return false
@@ -115,12 +115,12 @@ func JSONRecMatcher(value objx.Map, itemRx string) *RecMatcher {
 			}
 			actualValue, err := objx.FromJSON(text)
 			if err != nil {
-				wbgo.Error.Printf("JSONRecMatcher: failed to convert value to JSON: %s", text)
+				wbgong.Error.Printf("JSONRecMatcher: failed to convert value to JSON: %s", text)
 				return false
 			}
 			actualValueStr := actualValue.MustJSON() // fix key order
 			if valStr != actualValueStr {
-				wbgo.Error.Printf(
+				wbgong.Error.Printf(
 					"JSON value mismatch: %s (expected) != %s (actual)",
 					valStr, actualValueStr)
 				return false
@@ -319,12 +319,12 @@ var errorTestLog, warnTestLog *TestLog
 // that it's only shown if the current test fails.
 func SetupTestLogging(t *testing.T) {
 	errorTestLog = NewTestLog(t)
-	wbgo.Error = log.New(errorTestLog, "ERROR: ", log.Lshortfile)
+	wbgong.Error = log.New(errorTestLog, "ERROR: ", log.Lshortfile)
 	warnTestLog = NewTestLog(t)
-	wbgo.Warn = log.New(warnTestLog, "WARNING: ", log.Lshortfile)
-	wbgo.Info = log.New(NewTestLog(t), "INFO: ", log.Lshortfile)
+	wbgong.Warn = log.New(warnTestLog, "WARNING: ", log.Lshortfile)
+	wbgong.Info = log.New(NewTestLog(t), "INFO: ", log.Lshortfile)
 	// keep=true to make SetDebuggingEnabled() keep Debug
-	wbgo.SetDebugLogger(log.New(NewTestLog(t), "DEBUG: ", log.Lshortfile), true)
+	wbgong.SetDebugLogger(log.New(NewTestLog(t), "DEBUG: ", log.Lshortfile), true)
 }
 
 func EnsureNoErrorsOrWarnings(t *testing.T) {
@@ -360,7 +360,7 @@ func SetupTempDir(t *testing.T) (string, func()) {
 		return "", nil // never reached
 	}
 
-	dir, err := ioutil.TempDir(os.TempDir(), "wbgotest")
+	dir, err := ioutil.TempDir(os.TempDir(), "wbgongtest")
 	if err != nil {
 		require.FailNow(t, "couldn't create temporary directory")
 		return "", nil // never reached
@@ -378,7 +378,7 @@ type Suite struct {
 }
 
 func (suite *Suite) SetupTest() {
-	wbgo.Init("./wbgo.so")
+	wbgong.Init("./wbgo.so")
 	SetupTestLogging(suite.T())
 }
 

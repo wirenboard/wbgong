@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/contactless/wbgo"
+	"github.com/contactless/wbgong"
 	"github.com/stretchr/objx"
 )
 
@@ -17,8 +17,8 @@ const (
 
 type RpcFixture struct {
 	*FakeMQTTFixture
-	client     wbgo.MQTTClient
-	rpc        wbgo.MQTTRPCServer
+	client     wbgong.MQTTClient
+	rpc        wbgong.MQTTRPCServer
 	id         uint64
 	app        string
 	service    string
@@ -33,7 +33,7 @@ func NewRpcFixture(t *testing.T, app, service, clientName string, rcvr interface
 		service:         service,
 		clientName:      clientName,
 	}
-	f.rpc = wbgo.NewMQTTRPCServer(app, f.Broker.MakeClient(clientName))
+	f.rpc = wbgong.NewMQTTRPCServer(app, f.Broker.MakeClient(clientName))
 	f.rpc.Register(rcvr)
 	f.client = f.Broker.MakeClient("tst")
 	f.client.Start()
@@ -86,7 +86,7 @@ func (f *RpcFixture) verifyRpcRaw(subtopic string, params, expectedResponse objx
 	}
 	f.id++
 	subtopicWithId := subtopic + "/" + SAMPLE_CLIENT_ID
-	f.client.Publish(wbgo.MQTTMessage{f.topic(subtopicWithId), request.MustJSON(), 1, false})
+	f.client.Publish(wbgong.MQTTMessage{f.topic(subtopicWithId), request.MustJSON(), 1, false})
 	resp := expectedResponse.Copy()
 	resp["id"] = replyId
 	f.Verify(
