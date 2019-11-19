@@ -20,7 +20,7 @@ type DataFileFixture struct {
 
 func NewDataFileFixture(t *testing.T) (f *DataFileFixture) {
 	if oldRmDataDir != nil {
-		// don't use wbgo.Warn here to avoid unneeded test failures
+		// don't use wbgong.Warn here to avoid unneeded test failures
 		log.Printf("SetupTempDir(): WARNING: using auto cleanup for previous NewDataFileFixture() " +
 			"[perhaps due to an unfinished fixture setup]")
 		oldRmDataDir()

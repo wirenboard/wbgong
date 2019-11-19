@@ -1,4 +1,4 @@
-package wbgo
+package wbgong
 
 import (
 	"path/filepath"

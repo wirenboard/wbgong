@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time" // for Shuffle seed
 
-	"github.com/contactless/wbgo"
+	"github.com/contactless/wbgong"
 )
 
 const (
@@ -34,7 +34,7 @@ func topicMatch(pattern string, topic string) bool {
 	return topicPartsMatch(strings.Split(pattern, "/"), strings.Split(topic, "/"))
 }
 
-func FormatMQTTMessage(message wbgo.MQTTMessage) string {
+func FormatMQTTMessage(message wbgong.MQTTMessage) string {
 	suffix := ""
 	if message.Retained {
 		suffix = ", retained"
@@ -48,7 +48,7 @@ type SubscriptionMap map[string]SubscriptionList
 
 type dispatchedMessage struct {
 	client  *FakeMQTTClient
-	message wbgo.MQTTMessage
+	message wbgong.MQTTMessage
 	hack    func()
 }
 
@@ -58,7 +58,7 @@ type FakeMQTTBroker struct {
 	subscriptions   SubscriptionMap
 	waitForRetained bool
 	readyChannels   []chan struct{}
-	retained        map[string]wbgo.MQTTMessage
+	retained        map[string]wbgong.MQTTMessage
 	msgQueue        chan dispatchedMessage
 	quitCh          chan chan struct{}
 	numClients      int
@@ -71,7 +71,7 @@ func NewFakeMQTTBroker(t *testing.T, rec *Recorder) (broker *FakeMQTTBroker) {
 	broker = &FakeMQTTBroker{
 		Recorder:      rec,
 		subscriptions: make(SubscriptionMap),
-		retained:      make(map[string]wbgo.MQTTMessage),
+		retained:      make(map[string]wbgong.MQTTMessage),
 		msgQueue:      make(chan dispatchedMessage, DISPATHED_MESSAGE_QUEUE_LEN),
 		quitCh:        make(chan chan struct{}, 1),
 		numClients:    0,
@@ -118,7 +118,7 @@ func (broker *FakeMQTTBroker) SetReady() {
 	broker.readyChannels = nil
 }
 
-func (broker *FakeMQTTBroker) Publish(origin string, message wbgo.MQTTMessage) {
+func (broker *FakeMQTTBroker) Publish(origin string, message wbgong.MQTTMessage) {
 	broker.Lock()
 	defer broker.Unlock()
 
@@ -129,7 +129,7 @@ func (broker *FakeMQTTBroker) Publish(origin string, message wbgo.MQTTMessage) {
 	broker.publish(origin, message)
 }
 
-func (broker *FakeMQTTBroker) publish(origin string, message wbgo.MQTTMessage) {
+func (broker *FakeMQTTBroker) publish(origin string, message wbgong.MQTTMessage) {
 	broker.Rec("%s -> %s: %s", origin, message.Topic, FormatMQTTMessage(message))
 	message.Retained = false
 
@@ -149,7 +149,7 @@ func (broker *FakeMQTTBroker) publish(origin string, message wbgo.MQTTMessage) {
 	}
 }
 
-func (broker *FakeMQTTBroker) queueMessage(client *FakeMQTTClient, message wbgo.MQTTMessage) {
+func (broker *FakeMQTTBroker) queueMessage(client *FakeMQTTClient, message wbgong.MQTTMessage) {
 	broker.msgQueue <- dispatchedMessage{client, message, nil}
 }
 
@@ -202,7 +202,7 @@ func (broker *FakeMQTTBroker) MakeClient(id string) (client *FakeMQTTClient) {
 		id:          id,
 		started:     false,
 		broker:      broker,
-		callbackMap: make(map[string][]wbgo.MQTTMessageHandler),
+		callbackMap: make(map[string][]wbgong.MQTTMessageHandler),
 		ready:       make(chan struct{}),
 	}
 	if broker.waitForRetained {
@@ -229,17 +229,17 @@ type FakeMQTTClient struct {
 	id          string
 	started     bool
 	broker      *FakeMQTTBroker
-	callbackMap map[string][]wbgo.MQTTMessageHandler
+	callbackMap map[string][]wbgong.MQTTMessageHandler
 	ready       chan struct{}
 }
 
-func (client *FakeMQTTClient) receive(message wbgo.MQTTMessage) {
+func (client *FakeMQTTClient) receive(message wbgong.MQTTMessage) {
 	client.Lock()
 
 	// make a deep copy of callbacks map
-	localMap := make(map[string][]wbgo.MQTTMessageHandler)
+	localMap := make(map[string][]wbgong.MQTTMessageHandler)
 	for topic, handlers := range client.callbackMap {
-		localHndlrs := make([]wbgo.MQTTMessageHandler, len(handlers))
+		localHndlrs := make([]wbgong.MQTTMessageHandler, len(handlers))
 		for i := range handlers {
 			localHndlrs[i] = handlers[i]
 		}
@@ -291,12 +291,12 @@ func (client *FakeMQTTClient) ensureStarted() {
 	}
 }
 
-func (client *FakeMQTTClient) Publish(message wbgo.MQTTMessage) {
+func (client *FakeMQTTClient) Publish(message wbgong.MQTTMessage) {
 	client.ensureStarted()
 	client.broker.Publish(client.id, message)
 }
 
-func (client *FakeMQTTClient) Subscribe(callback wbgo.MQTTMessageHandler, topics ...string) {
+func (client *FakeMQTTClient) Subscribe(callback wbgong.MQTTMessageHandler, topics ...string) {
 	client.Lock()
 	defer client.Unlock()
 	client.ensureStarted()
@@ -306,7 +306,7 @@ func (client *FakeMQTTClient) Subscribe(callback wbgo.MQTTMessageHandler, topics
 		if found {
 			client.callbackMap[topic] = append(handlerList, callback)
 		} else {
-			client.callbackMap[topic] = []wbgo.MQTTMessageHandler{callback}
+			client.callbackMap[topic] = []wbgong.MQTTMessageHandler{callback}
 		}
 	}
 }
@@ -336,7 +336,7 @@ func NewFakeMQTTFixture(t *testing.T) *FakeMQTTFixture {
 
 // Shuffles slice of messages
 // Sometimes it's quite useful to make MQTT related tests more representable
-func ShuffleMessages(arr []wbgo.MQTTMessage) {
+func ShuffleMessages(arr []wbgong.MQTTMessage) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	for i := len(arr) - 1; i > 0; i-- {

@@ -2,7 +2,7 @@
 // of devices/controls.
 // Device filters are used in DriverBackend to filter MQTT topics to subscribe
 
-package wbgo
+package wbgong
 
 // DeviceFilter is a device filter representation for Driver
 type DeviceFilter interface {
