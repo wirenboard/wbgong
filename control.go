@@ -20,6 +20,7 @@ type ControlArgs interface {
 	SetRawValue(string) ControlArgs
 	SetValue(interface{}) ControlArgs
 	SetDoLoadPrevious(bool) ControlArgs
+	SetLazyInit(bool) ControlArgs
 
 	GetDevice() Device
 	GetID() *string
@@ -33,6 +34,7 @@ type ControlArgs interface {
 	GetRawValue() *string
 	GetValue() interface{}
 	GetDoLoadPrevious() *bool
+	GetLazyInit() *bool
 }
 
 // Control is a user representation of MQTT device control
@@ -68,6 +70,7 @@ type Control interface {
 	GetOrder() int                  // Gets control order (or -1 for auto) (/meta/order)
 	GetValue() (interface{}, error) // Gets control value (converted according to type)
 	GetRawValue() string            // Gets control value string
+	GetLazyInit() bool              // Gets control lazyInit flag
 
 	// generic setters
 	SetDescription(desc string) FuncError
@@ -78,6 +81,7 @@ type Control interface {
 	SetMax(max int) FuncError
 	SetError(e ControlError) FuncError
 	SetOrder(ord int) FuncError
+	SetLazyInit(bool) FuncError
 
 	// universal interface for UpdateValue and SetOnValue
 	SetValue(val interface{}) FuncError
