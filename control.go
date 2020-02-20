@@ -20,6 +20,9 @@ type ControlArgs interface {
 	SetRawValue(string) ControlArgs
 	SetValue(interface{}) ControlArgs
 	SetDoLoadPrevious(bool) ControlArgs
+	// SetLazyInit sets lazyInit flag to control
+	// If true - control will not create topic in mqtt before once explicitly set value to this control
+	// It also means that storage will be not used to store or restore values at all
 	SetLazyInit(bool) ControlArgs
 
 	GetDevice() Device
@@ -81,6 +84,9 @@ type Control interface {
 	SetMax(max int) FuncError
 	SetError(e ControlError) FuncError
 	SetOrder(ord int) FuncError
+	// SetLazyInit sets lazyInit flag to control
+	// If true - control will not create topic in mqtt before once explicitly set value to this control
+	// It also means that storage will be not used to store or restore values at all
 	SetLazyInit(bool) FuncError
 
 	// universal interface for UpdateValue and SetOnValue
