@@ -25,6 +25,10 @@ const (
 	REC_ITEM_TIMEOUT_MS    = 5000
 )
 
+func init() {
+	wbgong.Init("./wbgo.so")
+}
+
 var testStartTime = time.Date(2015, 2, 27, 19, 33, 17, 0, time.UTC)
 
 // WaitFor waits for the function specified by pred to return true.
@@ -324,7 +328,9 @@ func SetupTestLogging(t *testing.T) {
 	wbgong.Warn = log.New(warnTestLog, "WARNING: ", log.Lshortfile)
 	wbgong.Info = log.New(NewTestLog(t), "INFO: ", log.Lshortfile)
 	// keep=true to make SetDebuggingEnabled() keep Debug
-	wbgong.SetDebugLogger(log.New(NewTestLog(t), "DEBUG: ", log.Lshortfile), true)
+	// WierdBytes: temporarily disable debug logger because of https://github.com/golang/go/commit/95d06ab6c982f58b127b14a52c3325acf0bd3926
+	// wbgong.SetDebugLogger(log.New(NewTestLog(t), "DEBUG: ", log.Lshortfile), true)
+	wbgong.SetDebuggingEnabled(false)
 }
 
 func EnsureNoErrorsOrWarnings(t *testing.T) {
@@ -378,7 +384,6 @@ type Suite struct {
 }
 
 func (suite *Suite) SetupTest() {
-	wbgong.Init("./wbgo.so")
 	SetupTestLogging(suite.T())
 }
 
