@@ -57,4 +57,5 @@ var (
 	IncorrectControlIdError = errors.New("Control ID is incorrect")
 	NoTxContextError        = errors.New("No Tx context")
 	NotWritableControlError = errors.New("This control is not writable")
+	ReadonlyMissingError    = errors.New("Missing of mandatory readonly argument")
 )
