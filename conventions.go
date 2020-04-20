@@ -53,7 +53,6 @@ const (
 	CONV_META_SUBTOPIC_UNITS       = "units"       // for /devices/+/controls/+/meta/units
 	CONV_META_SUBTOPIC_MAX         = "max"         // for /devices/+/controls/+/meta/max
 	CONV_META_SUBTOPIC_DESCRIPTION = "description" // for /devices/+/controls/+/meta/description
-	CONV_META_SUBTOPIC_WRITABLE    = "writable"    // for /devices/+/controls/+/meta/writable
 	CONV_META_SUBTOPIC_READONLY    = "readonly"    // for /devices/+/controls/+/meta/readonly
 
 	// Type names
@@ -97,9 +96,6 @@ const (
 	CONV_ALARM_DEFAULT_VALUE  = CONV_ALARM_VALUE_FALSE
 
 	CONV_SUBTOPIC_ALL = "+"
-
-	// Default values for control fields
-	CONV_CONTROL_WRITABLE_DEFAULT = false
 )
 
 // ControlDataType is a real data types used in representations

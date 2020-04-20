@@ -13,7 +13,6 @@ type ControlArgs interface {
 	SetType(string) ControlArgs
 	SetUnits(string) ControlArgs
 	SetReadonly(bool) ControlArgs
-	SetWritable(bool) ControlArgs
 	SetMax(int) ControlArgs
 	SetError(ControlError) ControlArgs
 	SetOrder(int) ControlArgs
@@ -30,7 +29,7 @@ type ControlArgs interface {
 	GetDescription() *string
 	GetType() *string
 	GetUnits() *string
-	GetWritable() *bool
+	GetReadonly() *bool
 	GetMax() *int
 	GetError() ControlError
 	GetOrder() *int
@@ -66,8 +65,7 @@ type Control interface {
 	GetDescription() string         // Gets control description (/meta/description)
 	GetType() string                // Gets control type string (/meta/type) (TODO: special type for this)
 	GetUnits() string               // Gets control value units (/meta/units)
-	GetReadonly() bool              // Checks whether control is read only (TODO: merge with Writable?)
-	GetWritable() bool              // Checks whether control is writable
+	GetReadonly() bool              // Checks whether control is read only
 	GetMax() int                    // Gets max value for 'range' type (FIXME: rework this?)
 	GetError() ControlError         // Gets control error (/meta/error)
 	GetOrder() int                  // Gets control order (or -1 for auto) (/meta/order)
@@ -80,7 +78,6 @@ type Control interface {
 	SetType(t string) FuncError
 	SetUnits(units string) FuncError
 	SetReadonly(r bool) FuncError
-	SetWritable(w bool) FuncError
 	SetMax(max int) FuncError
 	SetError(e ControlError) FuncError
 	SetOrder(ord int) FuncError
