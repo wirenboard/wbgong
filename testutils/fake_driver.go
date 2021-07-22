@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/contactless/wbgong"
+	"github.com/wirenboard/wbgong"
 )
 
 // FakeDriverBackend is a dummy backend for model testing
