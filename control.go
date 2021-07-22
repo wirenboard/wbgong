@@ -86,11 +86,9 @@ type Control interface {
 	// It also means that storage will be not used to store or restore values at all
 	SetLazyInit(bool) FuncError
 
-	// universal interface for UpdateValue and SetOnValue
-	SetValue(val interface{}) FuncError
-
 	// Updates control value for local device
-	UpdateValue(val interface{}) FuncError
+	// and notifies subscribers if flag is set
+	UpdateValue(val interface{}, notifySubs bool) FuncError
 
 	// Sets '/on' value for external devices
 	SetOnValue(val interface{}) FuncError
@@ -120,10 +118,10 @@ type Control interface {
 	// Methodes to accept values from MQTT, called generally by driver
 	AcceptValue(rawValue string) error
 	AcceptOnValue(rawValue string) error
-	AcceptMeta(event NewExternalDeviceControlMetaEvent) error
+	AcceptMeta(metaType, value string) error
 }
 
 // ControlValueHandler is a function that handles new values on /devices/+/controls/+
 // XXX: TBD: reaction on error?
 // Handlers are running sync with DriverFrontend, so try not to push heavy stuff here
-type ControlValueHandler func(control Control, value interface{}, tx DriverTx) error
+type ControlValueHandler func(control Control, value interface{}, prevValue interface{}, tx DriverTx) error
