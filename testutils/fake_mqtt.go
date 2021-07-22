@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time" // for Shuffle seed
 
-	"github.com/contactless/wbgong"
+	"github.com/wirenboard/wbgong"
 )
 
 const (

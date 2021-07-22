@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/contactless/wbgong"
+	"github.com/wirenboard/wbgong"
 	"github.com/stretchr/objx"
 )
 

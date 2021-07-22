@@ -1,4 +1,4 @@
-module github.com/contactless/wbgong
+module github.com/wirenboard/wbgong
 
 go 1.12
 

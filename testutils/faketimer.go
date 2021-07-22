@@ -1,7 +1,7 @@
 package testutils
 
 import (
-	"github.com/contactless/wbgong"
+	"github.com/wirenboard/wbgong"
 	"github.com/stretchr/testify/require"
 	"log"
 	"sync"
