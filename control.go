@@ -86,11 +86,9 @@ type Control interface {
 	// It also means that storage will be not used to store or restore values at all
 	SetLazyInit(bool) FuncError
 
-	// universal interface for UpdateValue and SetOnValue
-	SetValue(val interface{}) FuncError
-
 	// Updates control value for local device
-	UpdateValue(val interface{}) FuncError
+	// and notifies subscribers if flag is set
+	UpdateValue(val interface{}, notifySubs bool) FuncError
 
 	// Sets '/on' value for external devices
 	SetOnValue(val interface{}) FuncError
