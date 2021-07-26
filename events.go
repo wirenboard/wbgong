@@ -82,8 +82,8 @@ type ControlValueEvent struct {
 }
 
 func (e ControlValueEvent) String() string {
-	return fmt.Sprintf("ControlValueEvent{Device:%s,Control:%s,Value:%s->%s}", e.Control.GetDevice().GetId(),
-		e.Control.GetId(), e.PrevRawValue, e.RawValue)
+	return fmt.Sprintf("ControlValueEvent{Device:%s,Control:%s,Value:%s}", e.Control.GetDevice().GetId(),
+		e.Control.GetId(), e.RawValue)
 }
 
 // ControlOnValueEvent control received 'on' value
