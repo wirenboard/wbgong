@@ -76,13 +76,14 @@ func (e NewExternalDeviceControlMetaEvent) String() string {
 // Device may be either local or external. For local controls
 // this event ignored by driver (sent for user handlers only)
 type ControlValueEvent struct {
-	Control  Control
-	RawValue string
+	Control      Control
+	RawValue     string
+	PrevRawValue string
 }
 
 func (e ControlValueEvent) String() string {
-	return fmt.Sprintf("ControlValueEvent{Device:%s,Control:%s,Value:%s}", e.Control.GetDevice().GetId(),
-		e.Control.GetId(), e.RawValue)
+	return fmt.Sprintf("ControlValueEvent{Device:%s,Control:%s,Value:%s->%s}", e.Control.GetDevice().GetId(),
+		e.Control.GetId(), e.PrevRawValue, e.RawValue)
 }
 
 // ControlOnValueEvent control received 'on' value
