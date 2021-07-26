@@ -124,4 +124,4 @@ type Control interface {
 // ControlValueHandler is a function that handles new values on /devices/+/controls/+
 // XXX: TBD: reaction on error?
 // Handlers are running sync with DriverFrontend, so try not to push heavy stuff here
-type ControlValueHandler func(control Control, value interface{}, tx DriverTx) error
+type ControlValueHandler func(control Control, value interface{}, prevValue interface{}, tx DriverTx) error
