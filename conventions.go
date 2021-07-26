@@ -1,5 +1,9 @@
 package wbgong
 
+import (
+	"log"
+)
+
 const (
 	//
 	// Format strings for fmt.Printf to form topic names
@@ -107,3 +111,57 @@ const (
 	CONV_DATATYPE_FLOAT
 	CONV_DATATYPE_BUTTON
 )
+
+var (
+	funcToTypedValue    func(string, string) (interface{}, error)
+	funcToRawValue      func(interface{}, string) (string, error)
+	funcGetDefaultValue func(string) (string, error)
+)
+
+func ToTypedValue(rawValue, typestr string) (interface{}, error) {
+	if funcToTypedValue != nil {
+		return funcToTypedValue(rawValue, typestr)
+	}
+	funcSym, errSym := plug.Lookup("ToTypedValue")
+	if errSym != nil {
+		log.Fatalf("Error in lookup symbol: %s", errSym)
+	}
+	var okResolve bool
+	funcToTypedValue, okResolve = funcSym.(func(string, string) (interface{}, error))
+	if !okResolve {
+		log.Fatal("Wrong sign on resolving func")
+	}
+	return funcToTypedValue(rawValue, typestr)
+}
+
+func ToRawValue(value interface{}, typestr string) (raw string, err error) {
+	if funcToRawValue != nil {
+		return funcToRawValue(value, typestr)
+	}
+	funcSym, errSym := plug.Lookup("ToRawValue")
+	if errSym != nil {
+		log.Fatalf("Error in lookup symbol: %s", errSym)
+	}
+	var okResolve bool
+	funcToRawValue, okResolve = funcSym.(func(interface{}, string) (string, error))
+	if !okResolve {
+		log.Fatal("Wrong sign on resolving func")
+	}
+	return funcToRawValue(value, typestr)
+}
+
+func GetDefaultValue(typestr string) (raw string, err error) {
+	if funcGetDefaultValue != nil {
+		return funcGetDefaultValue(typestr)
+	}
+	funcSym, errSym := plug.Lookup("GetDefaultValue")
+	if errSym != nil {
+		log.Fatalf("Error in lookup symbol: %s", errSym)
+	}
+	var okResolve bool
+	funcGetDefaultValue, okResolve = funcSym.(func(string) (string, error))
+	if !okResolve {
+		log.Fatal("Wrong sign on resolving func")
+	}
+	return funcGetDefaultValue(typestr)
+}
