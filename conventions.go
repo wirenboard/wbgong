@@ -113,9 +113,11 @@ const (
 )
 
 var (
-	funcToTypedValue    func(string, string) (interface{}, error)
-	funcToRawValue      func(interface{}, string) (string, error)
-	funcGetDefaultValue func(string) (string, error)
+	funcToTypedValue        func(string, string) (interface{}, error)
+	funcRawValueToDataTyped func(string, ControlDataType) (interface{}, error)
+	funcToRawValue          func(interface{}, string) (string, error)
+	funcDataTypedToRawValue func(interface{}, ControlDataType) (string, error)
+	funcGetDefaultValue     func(string) (string, error)
 )
 
 func ToTypedValue(rawValue, typestr string) (interface{}, error) {
@@ -134,6 +136,22 @@ func ToTypedValue(rawValue, typestr string) (interface{}, error) {
 	return funcToTypedValue(rawValue, typestr)
 }
 
+func RawValueToDataTyped(rawValue string, dataType ControlDataType) (interface{}, error) {
+	if funcRawValueToDataTyped != nil {
+		return funcRawValueToDataTyped(rawValue, dataType)
+	}
+	funcSym, errSym := plug.Lookup("RawValueToDataTyped")
+	if errSym != nil {
+		log.Fatalf("Error in lookup symbol: %s", errSym)
+	}
+	var okResolve bool
+	funcRawValueToDataTyped, okResolve = funcSym.(func(string, ControlDataType) (interface{}, error))
+	if !okResolve {
+		log.Fatal("Wrong sign on resolving func")
+	}
+	return funcRawValueToDataTyped(rawValue, dataType)
+}
+
 func ToRawValue(value interface{}, typestr string) (raw string, err error) {
 	if funcToRawValue != nil {
 		return funcToRawValue(value, typestr)
@@ -148,6 +166,22 @@ func ToRawValue(value interface{}, typestr string) (raw string, err error) {
 		log.Fatal("Wrong sign on resolving func")
 	}
 	return funcToRawValue(value, typestr)
+}
+
+func DataTypedToRawValue(value interface{}, dataType ControlDataType) (raw string, err error) {
+	if funcDataTypedToRawValue != nil {
+		return funcDataTypedToRawValue(value, dataType)
+	}
+	funcSym, errSym := plug.Lookup("DataTypedToRawValue")
+	if errSym != nil {
+		log.Fatalf("Error in lookup symbol: %s", errSym)
+	}
+	var okResolve bool
+	funcDataTypedToRawValue, okResolve = funcSym.(func(interface{}, ControlDataType) (string, error))
+	if !okResolve {
+		log.Fatal("Wrong sign on resolving func")
+	}
+	return funcDataTypedToRawValue(value, dataType)
 }
 
 func GetDefaultValue(typestr string) (raw string, err error) {
