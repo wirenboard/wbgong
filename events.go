@@ -62,9 +62,10 @@ func (e NewExternalDeviceMetaEvent) String() string {
 
 // NewExternalDeviceControlMetaEvent a new external device control metadata received
 type NewExternalDeviceControlMetaEvent struct {
-	Control Control
-	Type    string
-	Value   string
+	Control   Control
+	Type      string
+	Value     string
+	PrevValue string
 }
 
 func (e NewExternalDeviceControlMetaEvent) String() string {

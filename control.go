@@ -118,7 +118,7 @@ type Control interface {
 	// Methodes to accept values from MQTT, called generally by driver
 	AcceptValue(rawValue string) error
 	AcceptOnValue(rawValue string) error
-	AcceptMeta(event NewExternalDeviceControlMetaEvent) error
+	AcceptMeta(metaType, value string) error
 }
 
 // ControlValueHandler is a function that handles new values on /devices/+/controls/+
