@@ -50,7 +50,7 @@ type DeviceDriverTx interface {
 	// UpdateControlValue updates value for given control
 	// (sends message to /d/+/c/+) and notifies local subscribers
 	// about this change if notification flag is set
-	UpdateControlValue(control Control, rawValue string, notifySubs bool) func() error
+	UpdateControlValue(control Control, rawValue string, prevRawValue string, notifySubs bool) func() error
 
 	UpdateControlMeta(control Control, meta, value string) func() error
 	UpdateDeviceMeta(dev LocalDevice, meta, value string) func() error
