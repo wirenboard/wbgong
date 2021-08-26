@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/contactless/wbgong"
+	"github.com/wirenboard/wbgong"
 	"github.com/stretchr/objx"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
