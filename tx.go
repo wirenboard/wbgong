@@ -48,9 +48,9 @@ type DeviceDriverTx interface {
 	CreateControl(args ControlArgs) func() (Control, error)
 
 	// UpdateControlValue updates value for given control
-	// (sends message to /d/+/c/+)
-	// UpdateControlValues is a future request
-	UpdateControlValue(control Control, rawValue string) func() error
+	// (sends message to /d/+/c/+) and notifies local subscribers
+	// about this change if notification flag is set
+	UpdateControlValue(control Control, rawValue string, prevRawValue string, notifySubs bool) func() error
 
 	UpdateControlMeta(control Control, meta, value string) func() error
 	UpdateDeviceMeta(dev LocalDevice, meta, value string) func() error
