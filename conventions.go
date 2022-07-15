@@ -56,6 +56,7 @@ const (
 	CONV_META_SUBTOPIC_TYPE        = "type"        // for /devices/+/controls/+/meta/type
 	CONV_META_SUBTOPIC_UNITS       = "units"       // for /devices/+/controls/+/meta/units
 	CONV_META_SUBTOPIC_MAX         = "max"         // for /devices/+/controls/+/meta/max
+	CONV_META_SUBTOPIC_MIN         = "min"         // for /devices/+/controls/+/meta/min
 	CONV_META_SUBTOPIC_DESCRIPTION = "description" // for /devices/+/controls/+/meta/description
 	CONV_META_SUBTOPIC_READONLY    = "readonly"    // for /devices/+/controls/+/meta/readonly
 

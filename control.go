@@ -14,6 +14,7 @@ type ControlArgs interface {
 	SetUnits(string) ControlArgs
 	SetReadonly(bool) ControlArgs
 	SetMax(int) ControlArgs
+	SetMin(int) ControlArgs
 	SetError(ControlError) ControlArgs
 	SetOrder(int) ControlArgs
 	SetRawValue(string) ControlArgs
@@ -31,6 +32,7 @@ type ControlArgs interface {
 	GetUnits() *string
 	GetReadonly() *bool
 	GetMax() *int
+	GetMin() *int
 	GetError() ControlError
 	GetOrder() *int
 	GetRawValue() *string
@@ -67,6 +69,7 @@ type Control interface {
 	GetUnits() string               // Gets control value units (/meta/units)
 	GetReadonly() bool              // Checks whether control is read only
 	GetMax() int                    // Gets max value for 'range' type (FIXME: rework this?)
+	GetMin() int                    // Gets min value for 'range' type
 	GetError() ControlError         // Gets control error (/meta/error)
 	GetOrder() int                  // Gets control order (or -1 for auto) (/meta/order)
 	GetValue() (interface{}, error) // Gets control value (converted according to type)
@@ -79,6 +82,7 @@ type Control interface {
 	SetUnits(units string) FuncError
 	SetReadonly(r bool) FuncError
 	SetMax(max int) FuncError
+	SetMin(min int) FuncError
 	SetError(e ControlError) FuncError
 	SetOrder(ord int) FuncError
 	// SetLazyInit sets lazyInit flag to control
