@@ -40,6 +40,12 @@ const (
 	// 3. Meta subtopic name
 	CONV_CONTROL_META_FMT = "/devices/%s/controls/%s/meta/%s"
 
+	// Device control meta info v2 topic format string
+	// Parameters:
+	// 1. Device name
+	// 2. Control name
+	CONV_CONTROL_META_V2_FMT = "/devices/%s/controls/%s/meta"
+
 	// Device control all meta info topic format string
 	// Parameters:
 	// 1. Device name
