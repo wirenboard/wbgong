@@ -55,8 +55,8 @@ type DriverBackend interface {
 	UpdateControlValue(control Control, rawValue string) <-chan error
 	SetOnValue(control Control, rawValue string) <-chan error
 
-	UpdateControlMeta(control Control, meta, value string) <-chan error
-	UpdateDeviceMeta(dev LocalDevice, meta, value string) <-chan error
+	UpdateControlMeta(control Control, meta, value interface{}) <-chan error
+	UpdateDeviceMeta(dev LocalDevice, meta, value interface{}) <-chan error
 
 	// these are sent by suicide devices (when all device/control info is cleared)
 	RemoveExternalDevice(dev ExternalDevice)
