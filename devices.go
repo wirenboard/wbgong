@@ -118,7 +118,7 @@ func (m MetaInfo) String() (ret string) {
 	sort.Strings(keys)
 
 	for _, key := range keys {
-		ret += fmt.Sprintf("%s: '%s' ", key, m[key])
+		ret += fmt.Sprintf("%s: '%v' ", key, m[key])
 	}
 
 	ret += "]"
