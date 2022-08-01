@@ -105,7 +105,7 @@ type Control interface {
 	GetMeta() MetaInfo
 
 	// Saves single meta value in control structure (for driver)
-	SetSingleMeta(meta string, value interface{}) error
+	SetSingleMeta(meta string, value string) error
 
 	// Sets new value handler (for external controls only)
 	SetValueUpdateHandler(f ControlValueHandler) error
