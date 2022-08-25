@@ -104,6 +104,9 @@ type Control interface {
 	// Gets all metadata from control (for driver)
 	GetMeta() MetaInfo
 
+	// Gets all metadata from control for /meta (for driver)
+	GetMetaJson() MetaInfo
+
 	// Saves single meta value in control structure (for driver)
 	SetSingleMeta(meta string, value string) error
 
