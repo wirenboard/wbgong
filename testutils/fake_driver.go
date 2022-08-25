@@ -95,6 +95,11 @@ func (backend *FakeDriverBackend) UpdateControlMeta(control wbgong.Control, meta
 	return closedChan()
 }
 
+func (backend *FakeDriverBackend) UpdateControlMetaJson(control wbgong.Control) <-chan error {
+	backend.Rec("[FakeDriverBackend] UpdateControlMetaJson(control %s/%s)", control.GetDevice().GetId(), control.GetId())
+	return closedChan()
+}
+
 func (backend *FakeDriverBackend) RemoveControl(ctrl wbgong.Control) <-chan error {
 	backend.Rec("[FakeDriverBackend] RemoveControl(control %s/%s)", ctrl.GetDevice().GetId(), ctrl.GetId())
 	return closedChan()
