@@ -11,10 +11,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/wirenboard/wbgong"
 	"github.com/stretchr/objx"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"github.com/wirenboard/wbgong"
 )
 
 const (
@@ -182,7 +182,7 @@ func (rec *Recorder) verify(sortLogs bool, msg string, logs []interface{}) {
 			select {
 			case <-timer.C:
 				require.FailNow(rec.t, "timed out waiting for log item",
-					"%s", expectedItem)
+					"expectedItem: %s\nItems left: %d", expectedItem, len(logs)-n)
 			case logItem := <-rec.ch:
 				timer.Stop()
 				// If a regular expression is specified and it

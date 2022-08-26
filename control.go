@@ -9,7 +9,7 @@ type ControlError interface {
 type ControlArgs interface {
 	SetDevice(Device) ControlArgs
 	SetId(string) ControlArgs
-	SetTitle(string) ControlArgs
+	SetTitle(title Title) ControlArgs
 	SetDescription(string) ControlArgs
 	SetType(string) ControlArgs
 	SetUnits(string) ControlArgs
@@ -28,7 +28,7 @@ type ControlArgs interface {
 
 	GetDevice() Device
 	GetID() *string
-	GetTitle() *string
+	GetTitle() *Title
 	GetDescription() *string
 	GetType() *string
 	GetUnits() *string
@@ -66,7 +66,7 @@ type Control interface {
 
 	// generic getters
 	GetId() string                  // Gets control id (/devices/+/controls/[id])
-	GetTitle() string               // Gets control title (/meta/title)
+	GetTitle() Title                // Gets control title (/meta/title)
 	GetDescription() string         // Gets control description (/meta/description)
 	GetType() string                // Gets control type string (/meta/type) (TODO: special type for this)
 	GetUnits() string               // Gets control value units (/meta/units)
@@ -81,7 +81,7 @@ type Control interface {
 
 	// generic setters
 	SetDescription(desc string) FuncError
-	SetTitle(title string) FuncError
+	SetTitle(title Title) FuncError
 	SetType(t string) FuncError
 	SetUnits(units string) FuncError
 	SetReadonly(r bool) FuncError
@@ -103,6 +103,9 @@ type Control interface {
 
 	// Gets all metadata from control (for driver)
 	GetMeta() MetaInfo
+
+	// Gets all metadata from control for /meta (for driver)
+	GetMetaJson() MetaInfo
 
 	// Saves single meta value in control structure (for driver)
 	SetSingleMeta(meta string, value string) error

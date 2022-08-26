@@ -105,7 +105,7 @@ type LocalDeviceArgs interface {
 }
 
 // MetaInfo is a type that represents /meta/+ topics for drivers and controls
-type MetaInfo map[string]string
+type MetaInfo map[string]interface{}
 
 // Implementation of Stringer interface to print metadata correctly
 func (m MetaInfo) String() (ret string) {
@@ -118,7 +118,7 @@ func (m MetaInfo) String() (ret string) {
 	sort.Strings(keys)
 
 	for _, key := range keys {
-		ret += fmt.Sprintf("%s: '%s' ", key, m[key])
+		ret += fmt.Sprintf("%s: '%v' ", key, m[key])
 	}
 
 	ret += "]"

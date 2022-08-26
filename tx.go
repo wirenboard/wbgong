@@ -52,8 +52,9 @@ type DeviceDriverTx interface {
 	// about this change if notification flag is set
 	UpdateControlValue(control Control, rawValue string, prevRawValue string, notifySubs bool) func() error
 
-	UpdateControlMeta(control Control, meta, value string) func() error
-	UpdateDeviceMeta(dev LocalDevice, meta, value string) func() error
+	UpdateControlMeta(control Control, meta string, value interface{}) func() error
+	UpdateControlMetaJson(control Control) func() error
+	UpdateDeviceMeta(dev LocalDevice, meta string, value interface{}) func() error
 
 	// SetOnValue sends /on value for given control
 	// SetOnValue is a future request
