@@ -54,6 +54,9 @@ type Control interface {
 	// Checks whether control is complete (all required metadata received)
 	IsComplete() bool
 
+	// Checks whether control is delete
+	IsDelete() bool
+
 	// Checks whether control has retained value
 	// (which is not true for button types or something).
 	IsRetained() bool
