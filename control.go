@@ -55,7 +55,7 @@ type Control interface {
 	IsComplete() bool
 
 	// Checks whether control is delete
-	IsDelete() bool
+	IsDeleted() bool
 
 	// Checks whether control has retained value
 	// (which is not true for button types or something).
