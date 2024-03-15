@@ -42,6 +42,9 @@ type Device interface {
 	// Gets all device metadata
 	GetMeta() MetaInfo
 
+	// Gets all device metadata for /meta
+	GetMetaJson() MetaInfo
+
 	// Marks device as deleted
 	// Used by Driver frontend and device itself
 	MarkDeleted()
