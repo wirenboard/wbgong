@@ -28,6 +28,11 @@ const (
 	// 2. Meta subtopic name
 	CONV_DEVICE_META_FMT = "/devices/%s/meta/%s"
 
+	// Device meta info v2 topic format string
+	// Parameters:
+	// 1. Device name
+	CONV_DEVICE_META_V2_FMT = "/devices/%s/meta"
+
 	// Device driver topic format string
 	// Parameters:
 	// 1. Device name
