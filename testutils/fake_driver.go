@@ -90,6 +90,11 @@ func (backend *FakeDriverBackend) UpdateDeviceMeta(dev wbgong.LocalDevice, meta 
 	return closedChan()
 }
 
+func (backend *FakeDriverBackend) UpdateDeviceMetaJson(dev wbgong.LocalDevice) <-chan error {
+	backend.Rec("[FakeDriverBackend] UpdateDeviceMetaJson(device %s)", dev.GetId())
+	return closedChan()
+}
+
 func (backend *FakeDriverBackend) UpdateControlMeta(control wbgong.Control, meta string, value interface{}) <-chan error {
 	backend.Rec("[FakeDriverBackend] UpdateControlMeta(control %s/%s, meta %s, value %s)", control.GetDevice().GetId(), control.GetId(), meta, value)
 	return closedChan()
