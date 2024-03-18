@@ -28,7 +28,7 @@ type Device interface {
 	GetId() string
 
 	// Gets device title
-	GetTitle() string
+	GetTitle() Title
 
 	// Gets control by id
 	GetControl(id string) Control
@@ -41,6 +41,9 @@ type Device interface {
 
 	// Gets all device metadata
 	GetMeta() MetaInfo
+
+	// Gets all device metadata for /meta
+	GetMetaJson() MetaInfo
 
 	// Marks device as deleted
 	// Used by Driver frontend and device itself
@@ -84,7 +87,7 @@ type ExternalDevice interface {
 	AcceptMeta(event NewExternalDeviceMetaEvent) error
 
 	// Sets device title
-	SetTitle(title string)
+	SetTitle(title Title)
 
 	// Internal function to remove control on cleanup
 	RemoveControl(id string)
@@ -95,10 +98,10 @@ type LocalDeviceArgs interface {
 	SetVirtual(v bool) LocalDeviceArgs
 	SetDoLoadPrevious(v bool) LocalDeviceArgs
 	SetId(v string) LocalDeviceArgs
-	SetTitle(v string) LocalDeviceArgs
+	SetTitle(v Title) LocalDeviceArgs
 	SetDriver(v DeviceDriver) LocalDeviceArgs
 	GetID() *string
-	GetTitle() *string
+	GetTitle() *Title
 	GetDriver() DeviceDriver
 	GetVirtual() bool
 	GetDoLoadPrevious() bool

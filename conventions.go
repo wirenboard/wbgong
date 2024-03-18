@@ -61,7 +61,8 @@ const (
 	// Meta information subtopics
 
 	CONV_META_SUBTOPIC_DRIVER        = "driver"      // for /devices/+/meta/driver
-	CONV_META_SUBTOPIC_TITLE         = "name"        // for /devices/+/meta/title ('name' is legacy)
+	CONV_META_SUBTOPIC_TITLE         = "name"        // for /devices/+/meta/name ('name' is legacy)
+	CONV_META_SUBTOPIC_TITLE_V2      = "title"       // for /devices/+/meta/title
 	CONV_META_SUBTOPIC_ERROR         = "error"       // for /devices/+/controls/+/meta/error and /devices/+/meta/error
 	CONV_META_SUBTOPIC_ORDER         = "order"       // for /devices/+/controls/+/meta/order
 	CONV_META_SUBTOPIC_TYPE          = "type"        // for /devices/+/controls/+/meta/type
@@ -71,6 +72,7 @@ const (
 	CONV_META_SUBTOPIC_DESCRIPTION   = "description" // for /devices/+/controls/+/meta/description
 	CONV_META_SUBTOPIC_CONTROL_TITLE = "title"       // for /devices/+/controls/+/meta/title
 	CONV_META_SUBTOPIC_READONLY      = "readonly"    // for /devices/+/controls/+/meta/readonly
+	CONV_META_SUBTOPIC_CONTROL_ENUM  = "enum"        // for /devices/+/controls/+/meta/enum
 
 	// Type names
 	CONV_TYPE_SWITCH     = "switch"
