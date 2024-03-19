@@ -55,6 +55,7 @@ type DeviceDriverTx interface {
 	UpdateControlMeta(control Control, meta string, value interface{}) func() error
 	UpdateControlMetaJson(control Control) func() error
 	UpdateDeviceMeta(dev LocalDevice, meta string, value interface{}) func() error
+	UpdateDeviceMetaJson(dev LocalDevice) func() error
 
 	// SetOnValue sends /on value for given control
 	// SetOnValue is a future request
