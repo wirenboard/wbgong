@@ -10,6 +10,7 @@ type ControlArgs interface {
 	SetDevice(Device) ControlArgs
 	SetId(string) ControlArgs
 	SetTitle(title Title) ControlArgs
+	SetEnumTitles(map[string]Title) ControlArgs
 	SetDescription(string) ControlArgs
 	SetType(string) ControlArgs
 	SetUnits(string) ControlArgs
@@ -29,6 +30,7 @@ type ControlArgs interface {
 	GetDevice() Device
 	GetID() *string
 	GetTitle() *Title
+	GetEnumTitles() *map[string]Title
 	GetDescription() *string
 	GetType() *string
 	GetUnits() *string
@@ -68,23 +70,25 @@ type Control interface {
 	DoLoadPrevious() bool
 
 	// generic getters
-	GetId() string                  // Gets control id (/devices/+/controls/[id])
-	GetTitle() Title                // Gets control title (/meta/title)
-	GetDescription() string         // Gets control description (/meta/description)
-	GetType() string                // Gets control type string (/meta/type) (TODO: special type for this)
-	GetUnits() string               // Gets control value units (/meta/units)
-	GetReadonly() bool              // Checks whether control is read only
-	GetMax() int                    // Gets max value for 'range' type (FIXME: rework this?)
-	GetMin() int                    // Gets min value for 'range' type
-	GetError() ControlError         // Gets control error (/meta/error)
-	GetOrder() int                  // Gets control order (or -1 for auto) (/meta/order)
-	GetValue() (interface{}, error) // Gets control value (converted according to type)
-	GetRawValue() string            // Gets control value string
-	GetLazyInit() bool              // Gets control lazyInit flag
+	GetId() string                   // Gets control id (/devices/+/controls/[id])
+	GetTitle() Title                 // Gets control title (/meta/title)
+	GetEnumTitles() map[string]Title // Gets control enum titles (/meta/enum)
+	GetDescription() string          // Gets control description (/meta/description)
+	GetType() string                 // Gets control type string (/meta/type) (TODO: special type for this)
+	GetUnits() string                // Gets control value units (/meta/units)
+	GetReadonly() bool               // Checks whether control is read only
+	GetMax() int                     // Gets max value for 'range' type (FIXME: rework this?)
+	GetMin() int                     // Gets min value for 'range' type
+	GetError() ControlError          // Gets control error (/meta/error)
+	GetOrder() int                   // Gets control order (or -1 for auto) (/meta/order)
+	GetValue() (interface{}, error)  // Gets control value (converted according to type)
+	GetRawValue() string             // Gets control value string
+	GetLazyInit() bool               // Gets control lazyInit flag
 
 	// generic setters
 	SetDescription(desc string) FuncError
 	SetTitle(title Title) FuncError
+	SetEnumTitles(map[string]Title) FuncError
 	SetType(t string) FuncError
 	SetUnits(units string) FuncError
 	SetReadonly(r bool) FuncError
