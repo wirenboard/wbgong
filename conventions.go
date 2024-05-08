@@ -96,8 +96,12 @@ const (
 	CONV_TYPE_WATER_CONSUMPTION    = "water_consumption"
 	CONV_TYPE_RESISTANCE           = "resistance"
 	CONV_TYPE_CONCENTRATION        = "concentration"
+	CONV_TYPE_PRESSURE             = "pressure"
+	CONV_TYPE_ILLUMINANCE          = "lux"
+	CONV_TYPE_SOUND_LEVEL          = "sound_level"
 	CONV_TYPE_HEAT_POWER           = "heat_power"
 	CONV_TYPE_HEAT_ENERGY          = "heat_energy"
+	CONV_TYPE_CURRENT              = "current"
 
 	// Default data type for unknown meta type
 	CONV_DEFAULT_DATATYPE = CONV_DATATYPE_STRING
