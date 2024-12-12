@@ -50,6 +50,7 @@ var (
 
 	ExternalControlError    = errors.New("This control is external")
 	LocalControlError       = errors.New("This control is local")
+	WrongValueError         = errors.New("Wrong value")
 	WrongValueTypeError     = errors.New("Wrong value type")
 	UnknownControlMetaError = errors.New("Unknown control meta type")
 	IncompleteControlError  = errors.New("This control is incomplete")
