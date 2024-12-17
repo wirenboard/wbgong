@@ -17,6 +17,7 @@ type ControlArgs interface {
 	SetReadonly(bool) ControlArgs
 	SetMax(int) ControlArgs
 	SetMin(int) ControlArgs
+	SetPrecision(float64) ControlArgs
 	SetError(ControlError) ControlArgs
 	SetOrder(int) ControlArgs
 	SetRawValue(string) ControlArgs
@@ -37,6 +38,7 @@ type ControlArgs interface {
 	GetReadonly() *bool
 	GetMax() *int
 	GetMin() *int
+	GetPrecision() *float64
 	GetError() ControlError
 	GetOrder() *int
 	GetRawValue() *string
@@ -79,6 +81,7 @@ type Control interface {
 	GetReadonly() bool               // Checks whether control is read only
 	GetMax() int                     // Gets max value for 'range' type (FIXME: rework this?)
 	GetMin() int                     // Gets min value for 'range' type
+	GetPrecision() float64           // Gets precision for 'value' type
 	GetError() ControlError          // Gets control error (/meta/error)
 	GetOrder() int                   // Gets control order (or -1 for auto) (/meta/order)
 	GetValue() (interface{}, error)  // Gets control value (converted according to type)
@@ -94,6 +97,7 @@ type Control interface {
 	SetReadonly(r bool) FuncError
 	SetMax(max int) FuncError
 	SetMin(min int) FuncError
+	SetPrecision(prec float64) FuncError
 	SetError(e ControlError) FuncError
 	SetOrder(ord int) FuncError
 	// SetLazyInit sets lazyInit flag to control
