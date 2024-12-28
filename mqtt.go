@@ -23,6 +23,7 @@ type MQTTClient interface {
 	Start()
 	Stop()
 	Publish(message MQTTMessage)
+	PublishSynced(message MQTTMessage)
 	Subscribe(callback MQTTMessageHandler, topics ...string)
 	Unsubscribe(topics ...string)
 }

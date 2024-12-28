@@ -296,6 +296,11 @@ func (client *FakeMQTTClient) Publish(message wbgong.MQTTMessage) {
 	client.broker.Publish(client.id, message)
 }
 
+func (client *FakeMQTTClient) PublishSynced(message wbgong.MQTTMessage) {
+	client.ensureStarted()
+	client.broker.Publish(client.id, message)
+}
+
 func (client *FakeMQTTClient) Subscribe(callback wbgong.MQTTMessageHandler, topics ...string) {
 	client.Lock()
 	defer client.Unlock()
