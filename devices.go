@@ -73,6 +73,8 @@ type LocalDevice interface {
 
 	// Removes control by id
 	RemoveControl(id string) func() error
+
+	SetError(err DeviceError) FuncError
 }
 
 // ExternalDevice is a user representation of external MQTT device
@@ -93,6 +95,10 @@ type ExternalDevice interface {
 	RemoveControl(id string)
 }
 
+type DeviceError interface {
+	Error() string
+}
+
 // LocalDeviceArgs is a handy way to pass local device attributes
 type LocalDeviceArgs interface {
 	SetVirtual(v bool) LocalDeviceArgs
@@ -100,6 +106,7 @@ type LocalDeviceArgs interface {
 	SetId(v string) LocalDeviceArgs
 	SetTitle(v Title) LocalDeviceArgs
 	SetDriver(v DeviceDriver) LocalDeviceArgs
+	SetError(v DeviceError) LocalDeviceArgs
 	GetID() *string
 	GetTitle() *Title
 	GetDriver() DeviceDriver
