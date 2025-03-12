@@ -1,12 +1,12 @@
 package testutils
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 var oldRmDataDir func()
@@ -63,7 +63,7 @@ func (f *DataFileFixture) ensureTargetDirs(targetName string) (targetPath string
 }
 
 func (f *DataFileFixture) readSourceDataFile(sourceName string) []byte {
-	data, err := ioutil.ReadFile(filepath.Join(f.wd, sourceName))
+	data, err := os.ReadFile(filepath.Join(f.wd, sourceName))
 	f.Ckf("ReadFile()", err)
 	return data
 }
@@ -75,14 +75,14 @@ func (f *DataFileFixture) ReadSourceDataFile(sourceName string) string {
 func (f *DataFileFixture) CopyModifiedDataFileToTempDir(sourceName, targetName string, edit func(string) string) (targetPath string) {
 	data := string(f.readSourceDataFile(sourceName))
 	targetPath = f.ensureTargetDirs(targetName)
-	f.Ckf("WriteFile", ioutil.WriteFile(targetPath, []byte(edit(data)), 0777))
+	f.Ckf("WriteFile", os.WriteFile(targetPath, []byte(edit(data)), 0777))
 	return
 }
 
 func (f *DataFileFixture) CopyDataFileToTempDir(sourceName, targetName string) (targetPath string) {
 	data := f.readSourceDataFile(sourceName)
 	targetPath = f.ensureTargetDirs(targetName)
-	f.Ckf("WriteFile", ioutil.WriteFile(targetPath, data, 0777))
+	f.Ckf("WriteFile", os.WriteFile(targetPath, data, 0777))
 	return
 }
 
@@ -99,10 +99,15 @@ func (f *DataFileFixture) CopyDataFilesToTempDir(names ...string) {
 
 func (f *DataFileFixture) WriteDataFile(filename, content string) string {
 	targetPath := f.ensureTargetDirs(filename)
-	f.Ckf("WriteFile()", ioutil.WriteFile(targetPath, []byte(content), 0777))
+	f.Ckf("WriteFile()", os.WriteFile(targetPath, []byte(content), 0777))
 	return targetPath
 }
 
 func (f *DataFileFixture) RmFile(filename string) {
 	f.Ckf("Remove()", os.Remove(f.DataFilePath(filename)))
+}
+
+func (f *DataFileFixture) Touch(filename string, time time.Time) {
+	targetPath := f.ensureTargetDirs(filename)
+	f.Ckf("Chtimes()", os.Chtimes(targetPath, time, time))
 }

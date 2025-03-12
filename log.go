@@ -1,7 +1,7 @@
 package wbgong
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"log/syslog"
 	"os"
@@ -27,7 +27,7 @@ func init() {
 	Error = log.New(os.Stderr, "ERROR: ", log.LstdFlags)
 	Warn = log.New(os.Stderr, "WARNING: ", log.LstdFlags)
 	Info = log.New(os.Stderr, "INFO: ", log.LstdFlags)
-	Debug = log.New(ioutil.Discard, "", 0)
+	Debug = log.New(io.Discard, "", 0)
 }
 
 func MakeSyslogger(priority syslog.Priority, prefix string) *log.Logger {
@@ -66,7 +66,7 @@ func updateDebugLogger() {
 	case keepDebug:
 		return
 	case !DebuggingEnabled():
-		Debug = log.New(ioutil.Discard, "", 0)
+		Debug = log.New(io.Discard, "", 0)
 	case useSyslog:
 		Debug = MakeSyslogger(syslog.LOG_DAEMON|syslog.LOG_DEBUG, "DEBUG: ")
 	default:

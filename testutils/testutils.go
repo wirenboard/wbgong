@@ -2,7 +2,6 @@ package testutils
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"regexp"
@@ -366,7 +365,7 @@ func SetupTempDir(t *testing.T) (string, func()) {
 		return "", nil // never reached
 	}
 
-	dir, err := ioutil.TempDir(os.TempDir(), "wbgongtest")
+	dir, err := os.MkdirTemp("", "wbgongtest")
 	if err != nil {
 		require.FailNow(t, "couldn't create temporary directory")
 		return "", nil // never reached
