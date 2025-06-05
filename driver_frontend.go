@@ -23,13 +23,11 @@ type DriverArgs interface {
 	SetStoragePath(path string) DriverArgs
 	SetStorageMode(mode os.FileMode) DriverArgs
 	SetReownUnknownDevices(v bool) DriverArgs
-	SetStatsdClient(c StatsdClientWrapper) DriverArgs
 	Finalize()
 	GetBackend() DriverBackend
 	GetID() string
 	GetIsTesting() bool
 	GetReownUnknownDevices() bool
-	GetStatsdClient() StatsdClientWrapper
 	GetUseStorage() bool
 	GetStoragePath() string
 	GetStorageMode() os.FileMode
