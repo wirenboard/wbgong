@@ -21,7 +21,7 @@ type ControlArgs interface {
 	SetError(ControlError) ControlArgs
 	SetOrder(int) ControlArgs
 	SetRawValue(string) ControlArgs
-	SetValue(interface{}) ControlArgs
+	SetValue(any) ControlArgs
 	SetDoLoadPrevious(bool) ControlArgs
 	// SetLazyInit sets lazyInit flag to control
 	// If true - control will not create topic in mqtt before once explicitly set value to this control
@@ -42,7 +42,7 @@ type ControlArgs interface {
 	GetError() ControlError
 	GetOrder() *int
 	GetRawValue() *string
-	GetValue() interface{}
+	GetValue() any
 	GetDoLoadPrevious() *bool
 	GetLazyInit() *bool
 }
@@ -84,7 +84,7 @@ type Control interface {
 	GetPrecision() float64           // Gets precision for 'value' type
 	GetError() ControlError          // Gets control error (/meta/error)
 	GetOrder() int                   // Gets control order (or -1 for auto) (/meta/order)
-	GetValue() (interface{}, error)  // Gets control value (converted according to type)
+	GetValue() (any, error)          // Gets control value (converted according to type)
 	GetRawValue() string             // Gets control value string
 	GetLazyInit() bool               // Gets control lazyInit flag
 
@@ -107,10 +107,10 @@ type Control interface {
 
 	// Updates control value for local device
 	// and notifies subscribers if flag is set
-	UpdateValue(val interface{}, notifySubs bool) FuncError
+	UpdateValue(val any, notifySubs bool) FuncError
 
 	// Sets '/on' value for external devices
-	SetOnValue(val interface{}) FuncError
+	SetOnValue(val any) FuncError
 
 	// Gets all metadata from control (for driver)
 	GetMeta() MetaInfo
@@ -146,4 +146,4 @@ type Control interface {
 // ControlValueHandler is a function that handles new values on /devices/+/controls/+
 // XXX: TBD: reaction on error?
 // Handlers are running sync with DriverFrontend, so try not to push heavy stuff here
-type ControlValueHandler func(control Control, value interface{}, prevValue interface{}, tx DriverTx) error
+type ControlValueHandler func(control Control, value, prevValue any, tx DriverTx) error

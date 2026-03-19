@@ -64,8 +64,8 @@ func (e NewExternalDeviceMetaEvent) String() string {
 type NewExternalDeviceControlMetaEvent struct {
 	Control   Control
 	Type      string
-	Value     interface{}
-	PrevValue interface{}
+	Value     any
+	PrevValue any
 }
 
 func (e NewExternalDeviceControlMetaEvent) String() string {

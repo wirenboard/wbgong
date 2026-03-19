@@ -31,7 +31,6 @@ func EnableMQTTDebugLog(useSyslog bool) {
 		log.Fatal("Wrong sign on resolving func")
 	}
 	funcEnableMQTTDebugLog(useSyslog)
-	return
 }
 
 // MaybeInitProfiling enables cpu profiling if needed
@@ -50,7 +49,6 @@ func MaybeInitProfiling(readyCh <-chan struct{}) {
 		log.Fatal("Wrong sign on resolving func")
 	}
 	funcMaybeInitProfiling(readyCh)
-	return
 }
 
 // NewDriverBase returns new base driver

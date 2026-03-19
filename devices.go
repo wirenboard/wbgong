@@ -3,6 +3,7 @@ package wbgong
 import (
 	"fmt"
 	"sort"
+	"strings"
 )
 
 // Device is a user representation of MQTT device
@@ -115,37 +116,40 @@ type LocalDeviceArgs interface {
 }
 
 // MetaInfo is a type that represents /meta/+ topics for drivers and controls
-type MetaInfo map[string]interface{}
+type MetaInfo map[string]any
 
 // Implementation of Stringer interface to print metadata correctly
-func (m MetaInfo) String() (ret string) {
-	ret = "[ "
+func (m MetaInfo) String() string {
+	var b strings.Builder
+
+	b.WriteString("[ ")
+
 	keys := make([]string, 0, len(m))
 	for key := range m {
 		keys = append(keys, key)
 	}
-
 	sort.Strings(keys)
 
 	for _, key := range keys {
-		ret += fmt.Sprintf("%s: '%v' ", key, m[key])
+		fmt.Fprintf(&b, "%s: '%v' ", key, m[key])
 	}
 
-	ret += "]"
-	return
+	b.WriteString("]")
+
+	return b.String()
 }
 
 // Delta calculates the difference between two MetaInfos and returns
 // a new MetaInfo with delta containing these rows:
-//  - rows with the same key but different values;
-//  - rows from newMeta without the complementary ones in oldMeta - with values from newMeta;
-//  - rows from oldMeta without the complementary ones in newMeta - with empty values ("").
+// - rows with the same key but different values;
+// - rows from newMeta without the complementary ones in oldMeta - with values from newMeta;
+// - rows from oldMeta without the complementary ones in newMeta - with empty values ("").
 //
-//  For example:
+// For example:
 //
-//  newMeta: [ "a": "123", "b": "xyz", "d": "0" ]
-//  oldMeta: [ "a": "456", "c": "hello", "d": "0" ]
-//  delta: [ "a": "123", "b": "xyz", "c": "" ]
+// newMeta: [ "a": "123", "b": "xyz", "d": "0" ]
+// oldMeta: [ "a": "456", "c": "hello", "d": "0" ]
+// delta: [ "a": "123", "b": "xyz", "c": "" ]
 func (m MetaInfo) Delta(oldMeta MetaInfo) (delta MetaInfo) {
 	delta = make(MetaInfo)
 

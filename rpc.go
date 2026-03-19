@@ -4,6 +4,6 @@ package wbgong
 type MQTTRPCServer interface {
 	Start()
 	Stop()
-	Register(interface{}) error
-	RegisterName(string, interface{}) error
+	Register(any) error
+	RegisterName(string, any) error
 }

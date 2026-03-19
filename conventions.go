@@ -133,14 +133,14 @@ const (
 )
 
 var (
-	funcToTypedValue        func(string, string) (interface{}, error)
-	funcRawValueToDataTyped func(string, ControlDataType) (interface{}, error)
-	funcToRawValue          func(interface{}, string, ...interface{}) (string, error)
-	funcDataTypedToRawValue func(interface{}, ControlDataType, ...interface{}) (string, error)
+	funcToTypedValue        func(string, string) (any, error)
+	funcRawValueToDataTyped func(string, ControlDataType) (any, error)
+	funcToRawValue          func(any, string, ...any) (string, error)
+	funcDataTypedToRawValue func(any, ControlDataType, ...any) (string, error)
 	funcGetDefaultValue     func(string) (string, error)
 )
 
-func ToTypedValue(rawValue, typestr string) (interface{}, error) {
+func ToTypedValue(rawValue, typestr string) (any, error) {
 	if funcToTypedValue != nil {
 		return funcToTypedValue(rawValue, typestr)
 	}
@@ -149,14 +149,14 @@ func ToTypedValue(rawValue, typestr string) (interface{}, error) {
 		log.Fatalf("Error in lookup symbol: %s", errSym)
 	}
 	var okResolve bool
-	funcToTypedValue, okResolve = funcSym.(func(string, string) (interface{}, error))
+	funcToTypedValue, okResolve = funcSym.(func(string, string) (any, error))
 	if !okResolve {
 		log.Fatal("Wrong sign on resolving func")
 	}
 	return funcToTypedValue(rawValue, typestr)
 }
 
-func RawValueToDataTyped(rawValue string, dataType ControlDataType) (interface{}, error) {
+func RawValueToDataTyped(rawValue string, dataType ControlDataType) (any, error) {
 	if funcRawValueToDataTyped != nil {
 		return funcRawValueToDataTyped(rawValue, dataType)
 	}
@@ -165,14 +165,14 @@ func RawValueToDataTyped(rawValue string, dataType ControlDataType) (interface{}
 		log.Fatalf("Error in lookup symbol: %s", errSym)
 	}
 	var okResolve bool
-	funcRawValueToDataTyped, okResolve = funcSym.(func(string, ControlDataType) (interface{}, error))
+	funcRawValueToDataTyped, okResolve = funcSym.(func(string, ControlDataType) (any, error))
 	if !okResolve {
 		log.Fatal("Wrong sign on resolving func")
 	}
 	return funcRawValueToDataTyped(rawValue, dataType)
 }
 
-func ToRawValue(value interface{}, typestr string, args ...interface{}) (raw string, err error) {
+func ToRawValue(value any, typestr string, args ...any) (raw string, err error) {
 	if funcToRawValue != nil {
 		return funcToRawValue(value, typestr, args...)
 	}
@@ -181,14 +181,14 @@ func ToRawValue(value interface{}, typestr string, args ...interface{}) (raw str
 		log.Fatalf("Error in lookup symbol: %s", errSym)
 	}
 	var okResolve bool
-	funcToRawValue, okResolve = funcSym.(func(interface{}, string, ...interface{}) (string, error))
+	funcToRawValue, okResolve = funcSym.(func(any, string, ...any) (string, error))
 	if !okResolve {
 		log.Fatal("Wrong sign on resolving func")
 	}
 	return funcToRawValue(value, typestr, args...)
 }
 
-func DataTypedToRawValue(value interface{}, dataType ControlDataType, args ...interface{}) (raw string, err error) {
+func DataTypedToRawValue(value any, dataType ControlDataType, args ...any) (raw string, err error) {
 	if funcDataTypedToRawValue != nil {
 		return funcDataTypedToRawValue(value, dataType, args...)
 	}
@@ -197,7 +197,7 @@ func DataTypedToRawValue(value interface{}, dataType ControlDataType, args ...in
 		log.Fatalf("Error in lookup symbol: %s", errSym)
 	}
 	var okResolve bool
-	funcDataTypedToRawValue, okResolve = funcSym.(func(interface{}, ControlDataType, ...interface{}) (string, error))
+	funcDataTypedToRawValue, okResolve = funcSym.(func(any, ControlDataType, ...any) (string, error))
 	if !okResolve {
 		log.Fatal("Wrong sign on resolving func")
 	}

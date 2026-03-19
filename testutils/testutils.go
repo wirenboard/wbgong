@@ -79,7 +79,7 @@ type RegexpCaptureHandler func(submatches []string) bool
 // handler with submatches slice as an argument. Succeeds only in
 // case handler returns true. The speicified text is used in
 // mismatch logs.
-func RegexpCaptureMatcherWithCustomText(itemRx string, text string, handler RegexpCaptureHandler) *RecMatcher {
+func RegexpCaptureMatcherWithCustomText(itemRx, text string, handler RegexpCaptureHandler) *RecMatcher {
 	rx := regexp.MustCompile(itemRx)
 	return NewRecMatcher(
 		itemRx,
@@ -147,7 +147,7 @@ func NewRecorder(t *testing.T) *Recorder {
 	return rec
 }
 
-func (rec *Recorder) Rec(format string, args ...interface{}) {
+func (rec *Recorder) Rec(format string, args ...any) {
 	item := fmt.Sprintf(format, args...)
 	rec.t.Log("REC: ", item)
 	rec.ch <- item
@@ -170,69 +170,71 @@ func (rec *Recorder) VerifyEmpty() {
 	}
 }
 
-func (rec *Recorder) verify(sortLogs bool, msg string, logs []interface{}) {
+func (rec *Recorder) verify(sortLogs bool, msg string, logs []any) {
 	if logs == nil {
 		rec.VerifyEmpty()
-	} else {
-		actualLogs := make([]interface{}, 0, len(logs))
-		logs = logs[:]
-		for n, expectedItem := range logs {
-			timer := time.NewTimer(REC_ITEM_TIMEOUT_MS * time.Millisecond)
-			select {
-			case <-timer.C:
-				require.FailNow(rec.t, "timed out waiting for log item",
-					"expectedItem: %s\nItems left: %d", expectedItem, len(logs)-n)
-			case logItem := <-rec.ch:
-				timer.Stop()
-				// If a regular expression is specified and it
-				// matches, replace expected log item with
-				// actual log item. If it doesn't match, replace
-				// it with regular expression source text
-				if n < len(logs) {
-					switch logs[n].(type) {
-					case *regexp.Regexp:
-						rx := expectedItem.(*regexp.Regexp)
-						if rx.FindStringIndex(logItem) != nil {
-							logs[n] = logItem
-						} else {
-							logs[n] = rx.String()
-						}
-					case *RecMatcher:
-						matcher := expectedItem.(*RecMatcher)
-						if matcher.fn(logItem) {
-							logs[n] = logItem
-						} else {
-							logs[n] = matcher.text
-						}
+		return
+	}
+
+	actualLogs := make([]any, 0, len(logs))
+	logs = logs[:]
+	for n, expectedItem := range logs {
+		timer := time.NewTimer(REC_ITEM_TIMEOUT_MS * time.Millisecond)
+		select {
+		case <-timer.C:
+			require.FailNow(rec.t, "timed out waiting for log item",
+				"expectedItem: %s\nItems left: %d", expectedItem, len(logs)-n)
+		case logItem := <-rec.ch:
+			timer.Stop()
+			// If a regular expression is specified and it
+			// matches, replace expected log item with
+			// actual log item. If it doesn't match, replace
+			// it with regular expression source text
+			if n < len(logs) {
+				switch logs[n].(type) {
+				case *regexp.Regexp:
+					rx := expectedItem.(*regexp.Regexp)
+					if rx.FindStringIndex(logItem) != nil {
+						logs[n] = logItem
+					} else {
+						logs[n] = rx.String()
+					}
+				case *RecMatcher:
+					matcher := expectedItem.(*RecMatcher)
+					if matcher.fn(logItem) {
+						logs[n] = logItem
+					} else {
+						logs[n] = matcher.text
 					}
 				}
-				actualLogs = append(actualLogs, logItem)
 			}
-		}
-		if sortLogs {
-			// FIXME: this will fail on regexps
-			strLogs := make([]string, len(logs))
-			for n, log := range logs {
-				strLogs[n] = log.(string)
-			}
-			strActualLogs := make([]string, len(actualLogs))
-			for n, log := range actualLogs {
-				strActualLogs[n] = log.(string)
-			}
-			sort.Strings(strLogs)
-			sort.Strings(strActualLogs)
-			require.Equal(rec.t, strLogs, strActualLogs, msg)
-		} else {
-			require.Equal(rec.t, logs, actualLogs, msg)
+			actualLogs = append(actualLogs, logItem)
 		}
 	}
+	if sortLogs {
+		// FIXME: this will fail on regexps
+		strLogs := make([]string, len(logs))
+		strActualLogs := make([]string, len(actualLogs))
+		for n, log := range logs {
+			strLogs[n] = log.(string)
+		}
+		for n, log := range actualLogs {
+			strActualLogs[n] = log.(string)
+		}
+		sort.Strings(strLogs)
+		sort.Strings(strActualLogs)
+		require.Equal(rec.t, strLogs, strActualLogs, msg)
+		return
+	}
+
+	require.Equal(rec.t, logs, actualLogs, msg)
 }
 
-func (rec *Recorder) Verify(logs ...interface{}) {
+func (rec *Recorder) Verify(logs ...any) {
 	rec.verify(false, "rec logs", logs)
 }
 
-func (rec *Recorder) VerifyUnordered(logs ...interface{}) {
+func (rec *Recorder) VerifyUnordered(logs ...any) {
 	rec.verify(true, "rec logs (unordered)", logs)
 }
 
@@ -358,7 +360,7 @@ func WaitForWarnings(t *testing.T) {
 // fail. Returns the path to the temporary directory and cleanup
 // function that removes the directory and changes back to the directory
 // that was current before SetupTempDir was called.
-func SetupTempDir(t *testing.T) (string, func()) {
+func SetupTempDir(t *testing.T) (path string, cleanup func()) {
 	wd, err := os.Getwd()
 	if err != nil {
 		require.FailNow(t, "couldn't get the current directory")

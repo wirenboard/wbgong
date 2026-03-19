@@ -17,9 +17,9 @@ var (
 	Debug *log.Logger
 	// we want debug flag access to be FAST so we use sync.atomic
 	// to access it
-	debuggingEnabled int32 = 0
-	useSyslog              = false
-	keepDebug              = false
+	debuggingEnabled int32
+	useSyslog        = false
+	keepDebug        = false
 	debugMutex       sync.Mutex
 )
 
