@@ -146,7 +146,7 @@ func ToTypedValue(rawValue, typestr string) (any, error) {
 	}
 	funcSym, errSym := plug.Lookup("ToTypedValue")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcToTypedValue, okResolve = funcSym.(func(string, string) (any, error))
@@ -162,7 +162,7 @@ func RawValueToDataTyped(rawValue string, dataType ControlDataType) (any, error)
 	}
 	funcSym, errSym := plug.Lookup("RawValueToDataTyped")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcRawValueToDataTyped, okResolve = funcSym.(func(string, ControlDataType) (any, error))
@@ -178,7 +178,7 @@ func ToRawValue(value any, typestr string, args ...any) (raw string, err error) 
 	}
 	funcSym, errSym := plug.Lookup("ToRawValue")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcToRawValue, okResolve = funcSym.(func(any, string, ...any) (string, error))
@@ -194,7 +194,7 @@ func DataTypedToRawValue(value any, dataType ControlDataType, args ...any) (raw 
 	}
 	funcSym, errSym := plug.Lookup("DataTypedToRawValue")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcDataTypedToRawValue, okResolve = funcSym.(func(any, ControlDataType, ...any) (string, error))
@@ -210,7 +210,7 @@ func GetDefaultValue(typestr string) (raw string, err error) {
 	}
 	funcSym, errSym := plug.Lookup("GetDefaultValue")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcGetDefaultValue, okResolve = funcSym.(func(string) (string, error))

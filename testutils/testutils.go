@@ -57,7 +57,7 @@ func NewFixture(t *testing.T) *Fixture {
 func (f *Fixture) Ckf(msg string, err error) {
 	// named Ckf() to avoid name conflicts in suites
 	if err != nil {
-		require.FailNow(f.t, msg, "%s", err)
+		require.FailNow(f.t, msg, "%v", err)
 	}
 }
 
@@ -418,7 +418,7 @@ func (suite *Suite) WaitFor(pred func() bool) {
 
 func (suite *Suite) Ck(msg string, err error) {
 	if err != nil {
-		suite.Require().Fail(msg, "%s", err)
+		suite.Require().Fail(msg, "%v", err)
 	}
 }
 

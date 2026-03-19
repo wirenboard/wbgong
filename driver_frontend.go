@@ -206,7 +206,7 @@ func NewDriverArgs() DriverArgs {
 	}
 	funcSym, errSym := plug.Lookup("NewDriverArgs")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewDriverArgs, okResolve = funcSym.(func() DriverArgs)

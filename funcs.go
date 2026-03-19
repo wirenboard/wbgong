@@ -23,7 +23,7 @@ func EnableMQTTDebugLog(useSyslog bool) {
 	}
 	funcSym, errSym := plug.Lookup("EnableMQTTDebugLog")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcEnableMQTTDebugLog, okResolve = funcSym.(func(bool))
@@ -41,7 +41,7 @@ func MaybeInitProfiling(readyCh <-chan struct{}) {
 	}
 	funcSym, errSym := plug.Lookup("MaybeInitProfiling")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcMaybeInitProfiling, okResolve = funcSym.(func(<-chan struct{}))
@@ -58,7 +58,7 @@ func NewDriverBase(args DriverArgs) (DeviceDriver, error) {
 	}
 	funcSym, errSym := plug.Lookup("NewDriverBase")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewDriverBase, okResolve = funcSym.(func(args DriverArgs) (DeviceDriver, error))
@@ -75,7 +75,7 @@ func NewLocalDeviceArgs() LocalDeviceArgs {
 	}
 	funcSym, errSym := plug.Lookup("NewLocalDeviceArgs")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewLocalDeviceArgs, okResolve = funcSym.(func() LocalDeviceArgs)
@@ -92,7 +92,7 @@ func NewControlArgs() ControlArgs {
 	}
 	funcSym, errSym := plug.Lookup("NewControlArgs")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewControlArgs, okResolve = funcSym.(func() ControlArgs)
@@ -109,7 +109,7 @@ func NewContentTracker() ContentTracker {
 	}
 	funcSym, errSym := plug.Lookup("NewContentTracker")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewContentTracker, okResolve = funcSym.(func() ContentTracker)
@@ -126,7 +126,7 @@ func NewDirWatcher(pattern string, client DirWatcherClient) DirWatcher {
 	}
 	funcSym, errSym := plug.Lookup("NewDirWatcher")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewDirWatcher, okResolve = funcSym.(func(string, DirWatcherClient) DirWatcher)
@@ -143,7 +143,7 @@ func NewMQTTRPCServer(appName string, mqttClient MQTTClient) MQTTRPCServer {
 	}
 	funcSym, errSym := plug.Lookup("NewMQTTRPCServer")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewMQTTRPCServer, okResolve = funcSym.(func(string, MQTTClient) MQTTRPCServer)

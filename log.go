@@ -33,7 +33,7 @@ func init() {
 func MakeSyslogger(priority syslog.Priority, prefix string) *log.Logger {
 	writer, err := syslog.New(priority, path.Base(os.Args[0]))
 	if err != nil {
-		log.Panicf("syslog init failed: %s", err)
+		log.Panicf("syslog init failed: %v", err)
 	}
 	return log.New(writer, prefix, 0)
 }
