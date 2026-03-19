@@ -11,8 +11,8 @@ import (
 
 const (
 	deferredCapacity = 256
-	KiB              = 1024
-	stackBufferSize  = 32 * KiB
+	kiB              = 1024
+	stackBufferSize  = 32 * kiB
 )
 
 func doVisit(visitor, thing any, methodName string, args []any) bool {

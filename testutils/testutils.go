@@ -183,7 +183,7 @@ func (rec *Recorder) verify(sortLogs bool, msg string, logs []any) {
 		select {
 		case <-timer.C:
 			require.FailNow(rec.t, "timed out waiting for log item",
-				"expectedItem: %s\nItems left: %d", expectedItem, len(logs)-n)
+				"expectedItem: %v\nItems left: %d", expectedItem, len(logs)-n)
 		case logItem := <-rec.ch:
 			timer.Stop()
 			// If a regular expression is specified and it
