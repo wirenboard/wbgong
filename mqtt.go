@@ -35,7 +35,7 @@ func NewPahoMQTTClient(server, clientID string) MQTTClient {
 	}
 	funcSym, errSym := plug.Lookup("NewPahoMQTTClient")
 	if errSym != nil {
-		log.Fatalf("Error in lookup symbol: %s", errSym)
+		log.Fatalf("Error in lookup symbol: %v", errSym)
 	}
 	var okResolve bool
 	funcNewPahoMQTTClient, okResolve = funcSym.(func(string, string) MQTTClient)

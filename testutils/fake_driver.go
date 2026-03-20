@@ -85,8 +85,8 @@ func (backend *FakeDriverBackend) SetOnValue(control wbgong.Control, rawValue st
 	return closedChan()
 }
 
-func (backend *FakeDriverBackend) UpdateDeviceMeta(dev wbgong.LocalDevice, meta string, value interface{}) <-chan error {
-	backend.Rec("[FakeDriverBackend] UpdateDeviceMeta(device %s, meta %s, value %s)", dev.GetId(), meta, value)
+func (backend *FakeDriverBackend) UpdateDeviceMeta(dev wbgong.LocalDevice, meta string, value any) <-chan error {
+	backend.Rec("[FakeDriverBackend] UpdateDeviceMeta(device %s, meta %s, value %v)", dev.GetId(), meta, value)
 	return closedChan()
 }
 
@@ -95,8 +95,8 @@ func (backend *FakeDriverBackend) UpdateDeviceMetaJson(dev wbgong.LocalDevice) <
 	return closedChan()
 }
 
-func (backend *FakeDriverBackend) UpdateControlMeta(control wbgong.Control, meta string, value interface{}) <-chan error {
-	backend.Rec("[FakeDriverBackend] UpdateControlMeta(control %s/%s, meta %s, value %s)", control.GetDevice().GetId(), control.GetId(), meta, value)
+func (backend *FakeDriverBackend) UpdateControlMeta(control wbgong.Control, meta string, value any) <-chan error {
+	backend.Rec("[FakeDriverBackend] UpdateControlMeta(control %s/%s, meta %s, value %v)", control.GetDevice().GetId(), control.GetId(), meta, value)
 	return closedChan()
 }
 

@@ -17,9 +17,9 @@ var (
 	Debug *log.Logger
 	// we want debug flag access to be FAST so we use sync.atomic
 	// to access it
-	debuggingEnabled int32 = 0
-	useSyslog              = false
-	keepDebug              = false
+	debuggingEnabled int32
+	useSyslog        = false
+	keepDebug        = false
 	debugMutex       sync.Mutex
 )
 
@@ -33,7 +33,7 @@ func init() {
 func MakeSyslogger(priority syslog.Priority, prefix string) *log.Logger {
 	writer, err := syslog.New(priority, path.Base(os.Args[0]))
 	if err != nil {
-		log.Panicf("syslog init failed: %s", err)
+		log.Panicf("syslog init failed: %v", err)
 	}
 	return log.New(writer, prefix, 0)
 }

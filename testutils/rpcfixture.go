@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/wirenboard/wbgong"
 	"github.com/stretchr/objx"
+	"github.com/wirenboard/wbgong"
 )
 
 const (
@@ -25,7 +25,7 @@ type RpcFixture struct {
 	clientName string
 }
 
-func NewRpcFixture(t *testing.T, app, service, clientName string, rcvr interface{}, methods ...string) (f *RpcFixture) {
+func NewRpcFixture(t *testing.T, app, service, clientName string, rcvr any, methods ...string) (f *RpcFixture) {
 	f = &RpcFixture{
 		FakeMQTTFixture: NewFakeMQTTFixture(t),
 		id:              1,
@@ -38,9 +38,10 @@ func NewRpcFixture(t *testing.T, app, service, clientName string, rcvr interface
 	f.client = f.Broker.MakeClient("tst")
 	f.client.Start()
 	f.rpc.Start()
-	expect := []interface{}{
+	expect := make([]any, 0, 1+len(methods))
+	expect = append(expect,
 		fmt.Sprintf("Subscribe -- %s: /rpc/v1/%s/+/+/+", clientName, clientName),
-	}
+	)
 	for _, methodName := range methods {
 		expect = append(expect, f.expectedMessage(clientName, methodName, "1", true))
 	}
@@ -86,7 +87,7 @@ func (f *RpcFixture) verifyRpcRaw(subtopic string, params, expectedResponse objx
 	}
 	f.id++
 	subtopicWithId := subtopic + "/" + SAMPLE_CLIENT_ID
-	f.client.Publish(wbgong.MQTTMessage{f.topic(subtopicWithId), request.MustJSON(), 1, false})
+	f.client.Publish(wbgong.MQTTMessage{Topic: f.topic(subtopicWithId), Payload: request.MustJSON(), QoS: 1, Retained: false})
 	resp := expectedResponse.Copy()
 	resp["id"] = replyId
 	f.Verify(
@@ -94,11 +95,11 @@ func (f *RpcFixture) verifyRpcRaw(subtopic string, params, expectedResponse objx
 		f.expectedJSONMessage(f.clientName, subtopicWithId+"/reply", resp, false))
 }
 
-func (f *RpcFixture) VerifyRpc(subtopic string, params objx.Map, expectedResult interface{}) {
+func (f *RpcFixture) VerifyRpc(subtopic string, params objx.Map, expectedResult any) {
 	f.verifyRpcRaw(subtopic, params, objx.Map{"result": expectedResult})
 }
 
-func (f *RpcFixture) VerifyRpcError(subtopic string, param objx.Map, code int, typ string, msg string) {
+func (f *RpcFixture) VerifyRpcError(subtopic string, param objx.Map, code int, typ, msg string) {
 	f.verifyRpcRaw(
 		subtopic,
 		param,

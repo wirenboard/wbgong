@@ -1,6 +1,7 @@
 package wbgong
 
 import (
+	"fmt"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -8,25 +9,31 @@ import (
 	"sync"
 )
 
-const DEFERRED_CAPACITY = 256
+const (
+	deferredCapacity = 256
+	kiB              = 1024
+	stackBufferSize  = 32 * kiB
+)
 
-func doVisit(visitor interface{}, thing interface{}, methodName string, args []interface{}) bool {
-	if method, found := reflect.TypeOf(visitor).MethodByName(methodName); !found {
+func doVisit(visitor, thing any, methodName string, args []any) bool {
+	method, found := reflect.TypeOf(visitor).MethodByName(methodName)
+	if !found {
 		return false
-	} else {
-		moreValues := make([]reflect.Value, len(args))
-		for i, arg := range args {
-			moreValues[i] = reflect.ValueOf(arg)
-		}
-		method.Func.Call(append([]reflect.Value{
-			reflect.ValueOf(visitor),
-			reflect.ValueOf(thing),
-		}, moreValues...))
-		return true
 	}
+
+	moreValues := make([]reflect.Value, len(args))
+	for i, arg := range args {
+		moreValues[i] = reflect.ValueOf(arg)
+	}
+	method.Func.Call(append([]reflect.Value{
+		reflect.ValueOf(visitor),
+		reflect.ValueOf(thing),
+	}, moreValues...))
+
+	return true
 }
 
-func Visit(visitor interface{}, thing interface{}, prefix string, args ...interface{}) {
+func Visit(visitor, thing any, prefix string, args ...any) {
 	typeName := reflect.Indirect(reflect.ValueOf(thing)).Type().Name()
 	methodName := prefix + typeName
 	if !doVisit(visitor, thing, methodName, args) &&
@@ -44,7 +51,7 @@ type DeferredList struct {
 
 func NewDeferredList(executor func(func())) *DeferredList {
 	return &DeferredList{
-		fns:      make([]func(), 0, DEFERRED_CAPACITY),
+		fns:      make([]func(), 0, deferredCapacity),
 		executor: executor,
 	}
 }
@@ -82,11 +89,11 @@ func (dl *DeferredList) Ready() {
 func Truename(filePath string) (string, error) {
 	p, err := filepath.EvalSymlinks(filePath)
 	if err != nil {
-		return filePath, err
+		return filePath, fmt.Errorf("failed to evaluate symlinks: %w", err)
 	}
 	p, err = filepath.Abs(p)
 	if err != nil {
-		return filePath, err
+		return filePath, fmt.Errorf("failed to get absolute path: %w", err)
 	}
 	return filepath.Clean(p), nil
 }
@@ -106,7 +113,7 @@ func IsSubpath(basepath, maybeSubpath string) bool {
 }
 
 func GetStack() string {
-	buf := make([]byte, 32768)
+	buf := make([]byte, stackBufferSize)
 	n := runtime.Stack(buf, true)
 	return string(buf[0:n])
 }

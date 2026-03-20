@@ -16,7 +16,7 @@ const (
 	DISPATHED_MESSAGE_QUEUE_LEN = 1024 // TODO: make Subscribe easier and set this to 1
 )
 
-func topicPartsMatch(pattern []string, topic []string) bool {
+func topicPartsMatch(pattern, topic []string) bool {
 	if len(pattern) == 0 {
 		return len(topic) == 0
 	}
@@ -30,7 +30,7 @@ func topicPartsMatch(pattern []string, topic []string) bool {
 		topicPartsMatch(pattern[1:], topic[1:])
 }
 
-func topicMatch(pattern string, topic string) bool {
+func topicMatch(pattern, topic string) bool {
 	return topicPartsMatch(strings.Split(pattern, "/"), strings.Split(topic, "/"))
 }
 
@@ -39,8 +39,7 @@ func FormatMQTTMessage(message wbgong.MQTTMessage) string {
 	if message.Retained {
 		suffix = ", retained"
 	}
-	return fmt.Sprintf("[%s] (QoS %d%s)",
-		string(message.Payload), message.QoS, suffix)
+	return fmt.Sprintf("[%s] (QoS %d%s)", message.Payload, message.QoS, suffix)
 }
 
 type SubscriptionList []*FakeMQTTClient
@@ -82,18 +81,11 @@ func NewFakeMQTTBroker(t *testing.T, rec *Recorder) (broker *FakeMQTTBroker) {
 func (broker *FakeMQTTBroker) Start() {
 	// start message dispatcher
 	go func() {
-		for {
-			select {
-			case msg, ok := <-broker.msgQueue:
-				if ok {
-					if msg.hack != nil {
-						msg.hack()
-					} else {
-						msg.client.receive(msg.message)
-					}
-				} else {
-					return
-				}
+		for msg := range broker.msgQueue {
+			if msg.hack != nil {
+				msg.hack()
+			} else {
+				msg.client.receive(msg.message)
 			}
 		}
 	}()
@@ -176,7 +168,6 @@ func (broker *FakeMQTTBroker) Subscribe(client *FakeMQTTClient, topic string) {
 			broker.queueMessage(client, message)
 		}
 	}
-
 }
 
 func (broker *FakeMQTTBroker) Unsubscribe(client *FakeMQTTClient, topic string) {
@@ -240,9 +231,7 @@ func (client *FakeMQTTClient) receive(message wbgong.MQTTMessage) {
 	localMap := make(map[string][]wbgong.MQTTMessageHandler)
 	for topic, handlers := range client.callbackMap {
 		localHndlrs := make([]wbgong.MQTTMessageHandler, len(handlers))
-		for i := range handlers {
-			localHndlrs[i] = handlers[i]
-		}
+		copy(localHndlrs, handlers)
 		localMap[topic] = localHndlrs
 	}
 	client.Unlock()

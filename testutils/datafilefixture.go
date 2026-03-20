@@ -88,10 +88,9 @@ func (f *DataFileFixture) CopyDataFileToTempDir(sourceName, targetName string) (
 
 func (f *DataFileFixture) CopyDataFilesToTempDir(names ...string) {
 	for _, name := range names {
-		srcName, dstName := name, name
-		if idx := strings.Index(name, ":"); idx >= 0 {
-			srcName = name[:idx]
-			dstName = name[idx+1:]
+		srcName, dstName, found := strings.Cut(name, ":")
+		if !found {
+			dstName = name
 		}
 		f.CopyDataFileToTempDir(srcName, dstName)
 	}
