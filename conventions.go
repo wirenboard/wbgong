@@ -83,6 +83,7 @@ const (
 	CONV_TYPE_RGB        = "rgb"
 	CONV_TYPE_TEXT       = "text"
 	CONV_TYPE_VALUE      = "value"
+	CONV_TYPE_UNIXTIME   = "unixtime"
 
 	// Meta types (types derived from 'value')
 	CONV_TYPE_TEMPERATURE          = "temperature"
