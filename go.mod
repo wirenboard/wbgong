@@ -3,8 +3,8 @@ module github.com/wirenboard/wbgong
 go 1.20
 
 require (
-	github.com/stretchr/objx v0.5.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/objx v0.5.2
+	github.com/stretchr/testify v1.8.4
 )
 
 require (
