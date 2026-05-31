@@ -123,7 +123,6 @@ func (broker *FakeMQTTBroker) Publish(origin string, message wbgong.MQTTMessage)
 
 func (broker *FakeMQTTBroker) publish(origin string, message wbgong.MQTTMessage) {
 	broker.Rec("%s -> %s: %s", origin, message.Topic, FormatMQTTMessage(message))
-	message.Retained = false
 
 	clientsServed := make(map[*FakeMQTTClient]bool)
 
