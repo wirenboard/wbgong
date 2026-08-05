@@ -1,10 +1,10 @@
 module github.com/wirenboard/wbgong
 
-go 1.20
+go 1.24.0
 
 require (
-	github.com/stretchr/objx v0.5.2
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/objx v0.5.3
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
