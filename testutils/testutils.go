@@ -150,7 +150,17 @@ func NewRecorder(t *testing.T) *Recorder {
 func (rec *Recorder) Rec(format string, args ...any) {
 	item := fmt.Sprintf(format, args...)
 	rec.t.Log("REC: ", item)
-	rec.ch <- item
+	select {
+	case rec.ch <- item:
+	default:
+		// A full buffer previously blocked the producer forever - typically
+		// the driver goroutine mid-transaction - deadlocking any test that
+		// generates more records than it Verifies (seen with a rule script
+		// defining a device with dozens of controls). Dropping is diagnosable:
+		// the log above still has the item, and a later Verify of it fails
+		// with "timeout" right after this marker line.
+		rec.t.Log("REC OVERFLOW (dropped): ", item)
+	}
 }
 
 func (rec *Recorder) SetEmptyWaitTime(duration time.Duration) {
@@ -374,10 +384,15 @@ func SetupTempDir(t *testing.T) (path string, cleanup func()) {
 	}
 
 	os.Chdir(dir)
-	return dir, func() {
+	cleanup = func() {
 		os.RemoveAll(dir)
 		os.Chdir(wd)
 	}
+	// t.Cleanup runs even when the test fails via FailNow or panics, so the
+	// process never stays chdir'd into a removed directory; the returned
+	// cleanup stays for explicit calls (both orders are safe).
+	t.Cleanup(cleanup)
+	return dir, cleanup
 }
 
 type Suite struct {
