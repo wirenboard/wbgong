@@ -1,8 +1,8 @@
 package testutils
 
 import (
-	"github.com/wirenboard/wbgong"
 	"github.com/stretchr/testify/require"
+	"github.com/wirenboard/wbgong"
 	"log"
 	"sync"
 	"testing"
