@@ -2,6 +2,7 @@ package testutils
 
 import (
 	"os"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -25,23 +26,9 @@ func TestRecorderOverflowDoesNotBlock(t *testing.T) {
 	}
 	// the buffered 1000 records are still there for Verify
 	for i := 0; i < 1000; i++ {
-		rec.Verify("item " + itoa(i))
+		rec.Verify("item " + strconv.Itoa(i))
 	}
 	rec.VerifyEmpty()
-}
-
-func itoa(n int) string {
-	if n == 0 {
-		return "0"
-	}
-	var b [8]byte
-	i := len(b)
-	for n > 0 {
-		i--
-		b[i] = byte('0' + n%10)
-		n /= 10
-	}
-	return string(b[i:])
 }
 
 // SetupTempDir chdirs into the temp dir; if a test fails hard (FailNow or
@@ -59,6 +46,11 @@ func TestSetupTempDirRestoresCwdWithoutExplicitCleanup(t *testing.T) {
 			t.Fatal("no temp dir")
 		}
 		// deliberately no cleanup call - simulates FailNow/panic paths
+	})
+	t.Run("explicit-then-auto", func(t *testing.T) {
+		// explicit cleanup followed by the t.Cleanup re-run must be safe
+		_, cleanup := SetupTempDir(t)
+		cleanup()
 	})
 	after, err := os.Getwd()
 	if err != nil {
