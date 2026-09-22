@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"sort"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -136,6 +137,7 @@ type Recorder struct {
 	*Fixture
 	ch            chan string
 	emptyWaitTime time.Duration
+	closed        atomic.Bool // set when the owning test ends
 }
 
 func NewRecorder(t *testing.T) *Recorder {
@@ -144,13 +146,33 @@ func NewRecorder(t *testing.T) *Recorder {
 		ch:            make(chan string, 1000),
 		emptyWaitTime: REC_EMPTY_WAIT_TIME_MS * time.Millisecond,
 	}
+	// producers (driver goroutines, timers) may outlive the test; calling
+	// t.Log after the test ends panics the whole binary, so silence the
+	// recorder on all test exit paths
+	t.Cleanup(func() { rec.closed.Store(true) })
 	return rec
 }
 
 func (rec *Recorder) Rec(format string, args ...any) {
+	if rec.closed.Load() {
+		return // the owning test is over; logging now would panic the binary
+	}
 	item := fmt.Sprintf(format, args...)
 	rec.t.Log("REC: ", item)
-	rec.ch <- item
+	select {
+	case rec.ch <- item:
+	default:
+		// A full buffer previously blocked the producer forever - typically
+		// the driver goroutine mid-transaction - deadlocking any test that
+		// generates more records than it Verifies (seen with a rule script
+		// defining a device with dozens of controls). Dropping the NEWEST
+		// record is diagnosable: the log above still has the item, and a
+		// later Verify of it fails with "timeout" right after this marker.
+		// Note for tests that drain via SkipTill: a sync marker published
+		// after >1000 undrained records is exactly what gets dropped -
+		// drain earlier or assert less traffic.
+		rec.t.Log("REC OVERFLOW (dropped): ", item)
+	}
 }
 
 func (rec *Recorder) SetEmptyWaitTime(duration time.Duration) {
@@ -374,10 +396,15 @@ func SetupTempDir(t *testing.T) (path string, cleanup func()) {
 	}
 
 	os.Chdir(dir)
-	return dir, func() {
+	cleanup = func() {
 		os.RemoveAll(dir)
 		os.Chdir(wd)
 	}
+	// t.Cleanup runs even when the test fails via FailNow or panics, so the
+	// process never stays chdir'd into a removed directory; the returned
+	// cleanup stays for explicit calls (both orders are safe).
+	t.Cleanup(cleanup)
+	return dir, cleanup
 }
 
 type Suite struct {
